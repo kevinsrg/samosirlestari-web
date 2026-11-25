@@ -112,14 +112,11 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 <section class="screen on" id="onb">
  <div class="onb">
   <i class="lg big" role="img" aria-label="Logo SamosirLestari"></i>
-    <p class="mut" style="font-weight:700;color:var(--accent-text)">Pengembangan Wisata Alam &amp; Budaya Pulau Samosir</p><h1 id="ot">Lapor masalah dengan mudah</h1>
-  <p class="mut" id="od">Ambil foto, pilih kategori, dan kirim laporan untuk ditinjau.</p>
-  <p class="mut" id="oc">1 / 3</p>
+  <p class="mut" style="font-weight:700;color:var(--accent-text)">Pengembangan Wisata Alam &amp; Budaya Pulau Samosir</p>
   <div class="auth-actions">
    <button class="btn" data-go="login">Masuk</button>
    <button class="btn o" data-go="signup">Daftar akun</button>
   </div>
-  <button class="lnk" id="onext">Lihat pengenalan</button>
   <button class="btn s" style="margin:0 auto" data-go="home">Jelajahi sebagai tamu</button>
  </div>
 </section>
@@ -347,17 +344,6 @@ document.addEventListener('click',e=>{
  const t=e.target.closest('[data-go]');if(t)go(t.dataset.go);
 });
 
-/* Onboarding */
-const slides=[
- ['Lapor masalah dengan mudah','Ambil foto, pilih kategori, dan kirim laporan untuk ditinjau.'],
- ['Panduan pemilahan sampah','Pelajari langkah umum memilah sampah. Informasi bank sampah setempat belum tersedia.'],
- ['Pantau laporanmu','Laporan yang kamu kirim tersimpan privat di akun dan statusnya dapat dilihat di riwayat laporan.']
-];let si=0;
-$('#onext').onclick=()=>{
- si++;if(si>=slides.length){si=0;go('home');return}
- $('#ot').textContent=slides[si][0];$('#od').textContent=slides[si][1];$('#oc').textContent=(si+1)+' / 3';
- if(si===2)$('#onext').textContent='Jelajahi sebagai tamu';
-};
 /* Supabase Authentication */
 const supabaseUrl=window.SUPABASE_CONFIG?.url?.trim();
 const supabaseAnonKey=window.SUPABASE_CONFIG?.anonKey?.trim();
