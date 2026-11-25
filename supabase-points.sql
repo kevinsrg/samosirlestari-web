@@ -118,5 +118,4 @@ end;
 $$;
 
 revoke all on function public.initialize_point_balance() from public, anon, authenticated;
-revoke all on function public.award_points(text) from public, anon;
-grant execute on function public.award_points(text) to authenticated;
+revoke all on function public.award_points(text) from public, anon, authenticated;
