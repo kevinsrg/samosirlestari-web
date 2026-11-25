@@ -246,12 +246,17 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
  <div class="card" style="text-align:center"><button class="av" id="avBtn" aria-label="Ganti foto profil"><span class="ae">🙂</span><em>📷</em></button><input type="file" id="avFile" accept="image/*" hidden><button class="lnk" id="avDel" style="display:none">Hapus foto</button>
   <h3 id="nameRow"><span class="uname">Pengguna</span> <span class="pill">Lv. 1</span> <button class="btn s" id="nameEdit" aria-label="Ubah nama">✏️ Ubah</button></h3><div id="nameBox" style="display:none;margin:6px 0"><input type="text" id="nameIn" maxlength="30" aria-label="Nama kamu" placeholder="Nama kamu"><div class="row" style="margin-top:6px;justify-content:center"><button class="btn s" id="nameSave">Simpan</button><button class="btn s" id="nameCancel" style="background:transparent;border:1px solid var(--line)">Batal</button></div></div><p class="mut">Warga terverifikasi NIK • Pahlawan Hijau Kota<br>#KH-82914 • Kabupaten Samosir</p>
   <div class="row" style="justify-content:center;margin-top:8px"><b>🪙 <span class="points-value">0</span> Poin Kontribusi</b></div></div>
- <h2>Dampak nyata Anda <span class="mut yr">Tahun</span></h2>
- <div class="grid2"><div class="card"><h1>18</h1><p class="mut">Laporan ditangani</p></div><div class="card"><h1>46,2 kg</h1><p class="mut">CO₂ berkurang (≈ 4 bibit pohon)</p></div></div>
- <div class="card"><h1>12</h1><p class="mut">Aksi diikuti: gotong royong &amp; bank sampah desa</p></div>
- <h2>Koleksi lencana <span class="mut">4 / 4</span></h2>
- <div class="grid2"><div class="card">🔍<h3>Detektif Cerdas</h3><p class="mut">10+ laporan akurat</p></div><div class="card">🚲<h3>Komuter Hijau</h3><p class="mut">20x rute bebas emisi</p></div>
- <div class="card">♻️<h3>Master Daur Ulang</h3><p class="mut">50 kg terpilah</p></div><div class="card">🤝<h3>Penggerak Komunitas</h3><p class="mut">5x gotong royong</p></div></div>
+ <div id="profileImpactEmpty" class="card" style="text-align:center">
+  <b>Belum ada aktivitas tercatat</b><p class="mut">Statistik dan lencana akan muncul setelah poin kontribusi mulai terkumpul.</p>
+ </div>
+ <div id="profileImpactStats" hidden>
+  <h2>Dampak nyata Anda <span class="mut yr">Tahun</span></h2>
+  <div class="grid2"><div class="card"><h1>18</h1><p class="mut">Laporan ditangani</p></div><div class="card"><h1>46,2 kg</h1><p class="mut">CO₂ berkurang (≈ 4 bibit pohon)</p></div></div>
+  <div class="card"><h1>12</h1><p class="mut">Aksi diikuti: gotong royong &amp; bank sampah desa</p></div>
+  <h2>Koleksi lencana <span class="mut">4 / 4</span></h2>
+  <div class="grid2"><div class="card">🔍<h3>Detektif Cerdas</h3><p class="mut">10+ laporan akurat</p></div><div class="card">🚲<h3>Komuter Hijau</h3><p class="mut">20x rute bebas emisi</p></div>
+  <div class="card">♻️<h3>Master Daur Ulang</h3><p class="mut">50 kg terpilah</p></div><div class="card">🤝<h3>Penggerak Komunitas</h3><p class="mut">5x gotong royong</p></div></div>
+ </div>
  <h2>Pengaturan &amp; layanan warga</h2>
  <div class="card" data-go="lapor" style="cursor:pointer"><b>Riwayat laporan saya</b><p class="mut">Pantau laporan dan foto yang tersimpan</p></div>
   <div class="card"><b>Notifikasi tanggap bencana &amp; dinas</b><p class="mut">Peringatan banjir, kualitas udara &amp; jadwal sampah</p></div>
@@ -358,6 +363,9 @@ let reportPhotoUrl=null;
 
 function renderPoints(){
  $$('.points-value').forEach(e=>e.textContent=pointsBalance.toLocaleString('id-ID'));
+ const hasPoints=activeUserId!==null&&pointsBalance>0;
+ $('#profileImpactStats').hidden=!hasPoints;
+ $('#profileImpactEmpty').hidden=hasPoints;
 }
 
 async function loadPoints(user){
