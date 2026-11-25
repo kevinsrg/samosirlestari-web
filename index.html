@@ -54,6 +54,7 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 .tabs{display:flex;gap:6px;margin-bottom:10px}.tab{flex:1;border:0;padding:9px;border-radius:10px;background:var(--g1);color:var(--accent-text);font:inherit;font-weight:700;cursor:pointer}.tab.on{background:var(--g7);color:#fff}
 .steps li{list-style:none;display:flex;gap:10px;padding:6px 0}.dot{width:20px;height:20px;border-radius:50%;background:var(--g5);color:#fff;font-size:11px;display:grid;place-items:center;flex:none}.dot.w{background:var(--line);color:var(--mut)}
 .scan{height:150px;border-radius:14px;background:radial-gradient(circle at 50% 40%,#28799c,#123b58);display:grid;place-items:center;color:#fff;border:2px dashed #98d7f0;text-align:center;font-size:12px}
+.photo-preview{display:block;width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin-top:8px;background:var(--g0)}
 .bars{display:flex;align-items:flex-end;gap:8px;height:90px}.bars div{flex:1;background:var(--g5);border-radius:6px 6px 0 0;position:relative}.bars small{position:absolute;bottom:-16px;left:0;right:0;text-align:center;font-size:10px;color:var(--mut)}
 #toast{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--g0);padding:10px 16px;border-radius:99px;font-size:12px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:90%}
 #toast.on{opacity:1}
@@ -109,8 +110,8 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 <section class="screen on" id="onb">
  <div class="onb">
   <i class="lg big" role="img" aria-label="Logo SamosirLestari"></i>
-    <p class="mut" style="font-weight:700;color:var(--accent-text)">Pengembangan Wisata Alam &amp; Budaya Pulau Samosir</p><h1 id="ot">Lapor masalah kota dengan AI</h1>
-  <p class="mut" id="od">Unggah foto, biarkan AI mengenali jenis masalah dan meneruskannya ke dinas terkait dalam hitungan detik.</p>
+    <p class="mut" style="font-weight:700;color:var(--accent-text)">Pengembangan Wisata Alam &amp; Budaya Pulau Samosir</p><h1 id="ot">Lapor masalah dengan mudah</h1>
+  <p class="mut" id="od">Ambil foto, pilih kategori, dan kirim laporan untuk ditinjau.</p>
   <p class="mut" id="oc">1 / 3</p>
   <div class="auth-actions">
    <button class="btn" data-go="login">Masuk</button>
@@ -160,9 +161,9 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
   <div><h3>Skor Lingkungan Anda</h3><p class="mut">Sangat baik (+4 minggu ini)</p><p class="mut">Kualitas udara: AQI 58 • Sedang</p><p class="mut">Tuntas hari ini: 3 masalah kota</p></div></div></div>
  <h2>Aksi cepat warga</h2>
  <div class="grid2">
-  <button class="quick hero" data-go="lapor"><i class="ico">📷</i><b>Lapor Cerdas</b><span>Analisis visual foto</span></button>
+  <button class="quick hero" data-go="lapor"><i class="ico">📷</i><b>Lapor Masalah</b><span>Foto dan detail laporan</span></button>
   <button class="quick" data-go="rute"><i class="ico">🚲</i><b>Rute Hijau</b><span>Sepeda, bus &amp; jalan kaki</span></button>
-  <button class="quick" data-go="sampah"><i class="ico">♻️</i><b>Pilah Sampah</b><span>Scan AI &amp; panduan bank</span></button>
+  <button class="quick" data-go="sampah"><i class="ico">♻️</i><b>Pilah Sampah</b><span>Panduan pemilahan &amp; bank sampah</span></button>
   <button class="quick" data-go="komunitas"><i class="ico">🤝</i><b>Aksi Komunitas</b><span>Gotong royong &amp; lainnya</span></button>
  </div>
  <div class="card" style="background:var(--g7);color:#fff;margin-top:12px"><span class="pill b">Tantangan pekan ini • 3 hari lagi</span>
@@ -188,26 +189,37 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 
 <!-- LAPOR -->
 <section class="screen" id="lapor">
- <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Lapor Cerdas</h3></div>
- <div class="scan" id="scan"><div>📷<br><b>Ketuk untuk pindai foto</b><br>AI mengenali jenis masalah</div></div>
- <div class="card" id="ai" style="display:none;margin-top:10px"><span class="pill r">Urgensi AI: Tinggi</span>
-  <h3 style="margin-top:6px">Penumpukan sampah ilegal (96,4% akurat)</h3><p class="mut">Potensi vektor penyakit • Penyumbatan aliran air</p><p class="mut">Rekomendasi: Dinas Lingkungan Hidup Kabupaten Samosir</p></div>
- <label for="kat">Kategori masalah (otomatis AI)</label>
- <select id="kat"><option>Sampah liar &amp; ilegal</option><option>PJU rusak</option><option>Drainase &amp; banjir</option><option>Ruang hijau</option></select>
- <label>Lokasi otomatis (GPS)</label><div class="card" style="margin:0"><b>Jl. Raya Pangururan No. 14, Pangururan</b><p class="mut">Kabupaten Samosir, Sumatera Utara 22392</p></div>
- <label for="desc">Deskripsi tambahan <span class="mut" id="cnt">0/300</span></label>
- <textarea id="desc" rows="3" maxlength="300" placeholder="Contoh: sampah menumpuk sejak 2 hari lalu di dekat trotoar."></textarea>
- <label>Tingkat urgensi warga <span class="mut">Saran AI: Tinggi</span></label>
- <div class="seg" id="urg"><button>Rendah</button><button>Sedang</button><button class="on">Tinggi</button></div>
- <label class="row" style="font-weight:600"><input type="checkbox" id="anon"> Laporkan secara anonim ke publik</label>
- <p class="mut">Nama dan avatar disamarkan di feed publik. Verifikasi pemda tetap valid lewat NIK akun.</p>
- <button class="btn" id="send">Kirim laporan cerdas</button>
- <p class="mut" style="text-align:center;margin-top:6px">Rata-rata respons petugas lapangan: &lt; 4 jam</p>
- <div class="card" id="track" style="display:none;margin-top:12px"><h3>Laporan #KH-2894 · Progres 75%</h3>
-  <ul class="steps"><li><span class="dot">✓</span><div><b>Laporan terkirim &amp; terverifikasi AI</b><br><span class="mut">10:15 WIB</span></div></li>
-  <li><span class="dot">✓</span><div><b>Disposisi ke Dinas LH Samosir</b><br><span class="mut">10:42 WIB</span></div></li>
-  <li><span class="dot">3</span><div><b>Tim petugas menuju lokasi</b><br><span class="mut">Regu Kebersihan Pangururan • Est. 13:00</span></div></li>
-  <li><span class="dot w">4</span><div><b>Selesai &amp; pembersihan area</b><br><span class="mut">Menunggu foto bukti</span></div></li></ul></div>
+ <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Laporan Warga</h3></div>
+ <p class="mut">Unggah foto dan isi detailnya. Laporan serta foto disimpan privat di akun Anda.</p>
+ <form id="reportForm">
+  <label for="reportPhoto">Foto bukti</label>
+  <input id="reportPhoto" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" required>
+  <p class="mut" id="photoInfo">JPG, PNG, atau WebP. Maksimal 5 MB.</p>
+  <img id="photoPreview" class="photo-preview" alt="Pratinjau foto laporan" hidden>
+  <label for="reportCategory">Kategori masalah</label>
+  <select id="reportCategory" required>
+   <option value="waste">Sampah liar</option><option value="streetlight">Lampu jalan rusak</option>
+   <option value="drainage">Drainase atau banjir</option><option value="green_space">Ruang hijau</option>
+   <option value="other">Lainnya</option>
+  </select>
+  <label for="reportLocation">Lokasi</label>
+  <input id="reportLocation" type="text" maxlength="200" placeholder="Nama jalan, desa, atau patokan" required>
+  <button class="btn s" type="button" id="reportLocationButton" style="margin-top:6px">📍 Gunakan lokasi GPS</button>
+  <p class="mut" id="locationInfo">Lokasi GPS opsional; Anda juga dapat mengetik lokasi.</p>
+  <label for="desc">Keterangan <span class="mut" id="cnt">0/300</span></label>
+  <textarea id="desc" rows="3" maxlength="300" placeholder="Jelaskan masalah yang ditemukan."></textarea>
+  <label>Tingkat urgensi</label>
+  <div class="seg" id="urg">
+   <button type="button" data-value="low">Rendah</button>
+   <button type="button" data-value="medium" class="on">Sedang</button>
+   <button type="button" data-value="high">Tinggi</button>
+  </div>
+  <p class="mut" style="margin-top:8px">Foto hanya dapat dilihat oleh pemilik akun. Laporan belum ditampilkan ke publik.</p>
+  <button class="btn" id="send" type="submit">Kirim laporan</button>
+ </form>
+ <div class="card" id="track" style="display:none;margin-top:12px" role="status" aria-live="polite"></div>
+ <h2>Laporan saya</h2>
+ <div id="myReports"><p class="mut">Masuk untuk melihat laporan Anda.</p></div>
 </section>
 
 <!-- KOMUNITAS -->
@@ -241,28 +253,28 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
  <div class="grid2"><div class="card">🔍<h3>Detektif Cerdas</h3><p class="mut">10+ laporan akurat</p></div><div class="card">🚲<h3>Komuter Hijau</h3><p class="mut">20x rute bebas emisi</p></div>
  <div class="card">♻️<h3>Master Daur Ulang</h3><p class="mut">50 kg terpilah</p></div><div class="card">🤝<h3>Penggerak Komunitas</h3><p class="mut">5x gotong royong</p></div></div>
  <h2>Pengaturan &amp; layanan warga</h2>
- <div class="card"><b>Riwayat laporan saya</b><p class="mut">Pantau tindak lanjut laporan</p></div>
+ <div class="card" data-go="lapor" style="cursor:pointer"><b>Riwayat laporan saya</b><p class="mut">Pantau laporan dan foto yang tersimpan</p></div>
   <div class="card"><b>Notifikasi tanggap bencana &amp; dinas</b><p class="mut">Peringatan banjir, kualitas udara &amp; jadwal sampah</p></div>
- <div class="card"><b>Panduan warga &amp; bantuan kota</b><p class="mut">SOP lapor AI &amp; kontak darurat call center 112</p></div>
+ <div class="card"><b>Panduan warga &amp; bantuan kota</b><p class="mut">Panduan membuat laporan warga &amp; kontak darurat call center 112</p></div>
  <button class="btn o" id="logoutButton" style="color:var(--red);border-color:var(--red)">Keluar akun</button>
  <p class="mut" style="text-align:center;margin-top:8px">SamosirLestari Samosir v2.4.1</p>
 </section>
 
 <!-- PILAH SAMPAH -->
 <section class="screen" id="sampah">
- <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Asisten Pilah Sampah</h3></div>
- <div class="scan">🔎 AI Vision aktif<br>Menganalisis material… 99,1%</div>
- <div class="card" style="margin-top:10px"><span class="pill">Dapat didaur ulang • Grade A</span><h3 style="margin-top:6px">Botol plastik PET</h3>
+ <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Panduan Pilah Sampah</h3></div>
+ <div class="scan">Panduan umum<br>Contoh: botol plastik PET</div>
+ <div class="card" style="margin-top:10px"><span class="pill">Dapat didaur ulang • Panduan umum</span><h3 style="margin-top:6px">Botol plastik PET</h3>
   <p class="mut">Plastik bening elastis, ideal untuk daur ulang serat tekstil dan botol kembali.</p>
   <div class="grid2" style="margin-top:8px"><div><b>Rp 200–500</b><p class="mut">Nilai bank sampah per botol bersih</p></div><div><b>+10 Poin</b><p class="mut">Poin kontribusi</p></div></div></div>
  <h2>Panduan 3 langkah pemilahan</h2>
  <ol class="steps card"><li><span class="dot">1</span><div><b>Kosongkan &amp; bilas</b><br><span class="mut">Buang sisa air, bilas sebentar agar tidak bau.</span></div></li>
  <li><span class="dot">2</span><div><b>Lepas tutup &amp; label luar</b><br><span class="mut">Tutup botol dan segel punya titik lebur berbeda.</span></div></li>
  <li><span class="dot">3</span><div><b>Remas &amp; pipihkan</b><br><span class="mut">Volume mengecil hingga 70%.</span></div></li></ol>
- <button class="btn" id="setor">Catat setoran sampah (+10 Poin, sekali)</button><button class="btn o" id="scanLain">Pindai sampah lain</button>
+ <button class="btn" id="setor">Catat setoran sampah (+10 Poin, sekali)</button>
  <h2>Titik setor terdekat</h2>
- <div class="card"><div class="row"><div><b>Bank Sampah Desa Pangururan (contoh)</b><p class="mut">350 m • Buka s.d. 16:00 WIB • Plastik, kertas, kardus</p></div><span class="pill">Terverifikasi</span></div></div>
- <div class="card"><div class="row"><div><b>Smart Drop Box</b><p class="mut">600 m • Buka 24 jam • Scan botol &amp; tukar poin otomatis</p></div><span class="pill b">Siap pakai</span></div></div>
+ <div class="card"><div class="row"><div><b>Bank Sampah Desa Pangururan (contoh)</b><p class="mut">350 m • Buka s.d. 16:00 WIB • Plastik, kertas, kardus</p></div><span class="pill">Contoh</span></div></div>
+ <div class="card"><div class="row"><div><b>Smart Drop Box (contoh)</b><p class="mut">Periksa ketersediaan dan layanan di lokasi sebelum digunakan.</p></div><span class="pill b">Contoh</span></div></div>
 </section>
 
 <!-- RUTE HIJAU -->
@@ -306,6 +318,7 @@ function go(id){
  $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
  if(id==='tukar'){}
  $('#main').scrollTop=0;
+ if(id==='lapor')loadMyReports();
  if(id==='peta')initMap();
 }
 document.addEventListener('click',e=>{
@@ -317,7 +330,7 @@ document.addEventListener('click',e=>{
 
 /* Onboarding */
 const slides=[
- ['Lapor masalah kota dengan AI','Unggah foto, biarkan AI mengenali jenis masalah dan meneruskannya ke dinas terkait dalam hitungan detik.'],
+ ['Lapor masalah dengan mudah','Ambil foto, pilih kategori, dan kirim laporan untuk ditinjau.'],
  ['Aksi bersama komunitas hijau','Ikuti gotong royong, pilah sampah bernilai ekonomi, dan bangun kebun pangan bersama tetangga di sekitar desa Anda.'],
  ['Hemat emisi, dapat poin','Pilih Rute Hijau, kumpulkan Poin Kontribusi, lalu tukar dengan voucher dan sembako hijau.']
 ];let si=0;
@@ -339,6 +352,9 @@ const authConfigured=Boolean(
 const auth=authConfigured?window.supabase.createClient(supabaseUrl,supabaseAnonKey):null;
 let activeUserId=null;
 let pointsBalance=0;
+const REPORT_BUCKET='report-photos';
+let reportCoordinates={latitude:null,longitude:null};
+let reportPhotoUrl=null;
 
 function renderPoints(){
  $$('.points-value').forEach(e=>e.textContent=pointsBalance.toLocaleString('id-ID'));
@@ -383,6 +399,100 @@ async function awardPoints(actionKey){
   ?'Bonus untuk aksi ini sudah pernah didapat.'
   :`Berhasil! +${result.points_awarded} Poin Kontribusi`);
  return result;
+}
+
+function appendReportText(parent,tag,text,className){
+ const element=document.createElement(tag);
+ if(className)element.className=className;
+ element.textContent=text;
+ parent.appendChild(element);
+ return element;
+}
+
+async function loadMyReports(){
+ const container=$('#myReports');
+ if(!auth||!activeUserId){
+  container.textContent='Masuk untuk melihat laporan Anda.';
+  return;
+ }
+ const userId=activeUserId;
+ container.textContent='Memuat laporan...';
+ const {data,error}=await auth.from('reports')
+  .select('id,category,urgency,description,location_label,photo_path,status,created_at')
+  .eq('user_id',userId)
+  .order('created_at',{ascending:false})
+  .limit(20);
+ if(activeUserId!==userId)return;
+ if(error){
+  container.textContent=`Riwayat laporan gagal dimuat: ${error.message}`;
+  return;
+ }
+ container.replaceChildren();
+ if(!data.length){
+  appendReportText(container,'p','Belum ada laporan.','mut');
+  return;
+ }
+ const categories={waste:'Sampah liar',streetlight:'Lampu jalan rusak',drainage:'Drainase atau banjir',green_space:'Ruang hijau',other:'Lainnya'};
+ const statuses={pending_verification:'Menunggu verifikasi',reviewing:'Sedang ditinjau',handled:'Ditangani',rejected:'Ditolak'};
+ for(const report of data){
+  const card=document.createElement('article');
+  card.className='card';
+  const row=document.createElement('div');
+  row.className='row';
+  appendReportText(row,'h3',categories[report.category]||'Laporan warga');
+  const spacer=document.createElement('span');
+  spacer.className='sp';
+  row.appendChild(spacer);
+  appendReportText(row,'span',statuses[report.status]||report.status,'pill');
+  card.appendChild(row);
+  appendReportText(card,'p',report.location_label,'mut');
+  if(report.description)appendReportText(card,'p',report.description);
+  appendReportText(card,'p',new Date(report.created_at).toLocaleString('id-ID'),'mut');
+  const {data:signedData,error:signedError}=await auth.storage.from(REPORT_BUCKET).createSignedUrl(report.photo_path,3600);
+  if(activeUserId!==userId)return;
+  if(signedError){
+   appendReportText(card,'p',`Foto tidak dapat dibuka: ${signedError.message}`,'mut');
+  }else{
+   const image=document.createElement('img');
+   image.className='photo-preview';
+   image.src=signedData.signedUrl;
+   image.alt=`Foto laporan kategori ${categories[report.category]||'lainnya'}`;
+   image.loading='lazy';
+   card.appendChild(image);
+  }
+  container.appendChild(card);
+ }
+}
+
+async function prepareReportPhoto(file){
+ const bitmap=await createImageBitmap(file);
+ const scale=Math.min(1,1600/bitmap.width,1600/bitmap.height);
+ const canvas=document.createElement('canvas');
+ canvas.width=Math.round(bitmap.width*scale);
+ canvas.height=Math.round(bitmap.height*scale);
+ const context=canvas.getContext('2d');
+ if(!context){
+  bitmap.close();
+  throw new Error('Foto tidak dapat diproses di browser ini.');
+ }
+ context.drawImage(bitmap,0,0,canvas.width,canvas.height);
+ bitmap.close();
+ const blob=await new Promise((resolve,reject)=>canvas.toBlob(
+  result=>result?resolve(result):reject(new Error('Foto gagal dikompres.')),
+  'image/jpeg',
+  0.82
+ ));
+ return new File([blob],`report-${Date.now()}.jpg`,{type:'image/jpeg'});
+}
+
+function showSavedReport(reportId){
+ const track=$('#track');
+ track.replaceChildren();
+ appendReportText(track,'span','Terkirim • Menunggu verifikasi','pill');
+ appendReportText(track,'h3','Laporan berhasil disimpan');
+ appendReportText(track,'p',`Nomor laporan: ${reportId}`,'mut');
+ track.style.display='block';
+ track.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function setAuthStatus(message,isError=false){
@@ -519,13 +629,137 @@ function pin(i){const p=pins[i];$('#pinCard').innerHTML=`<h3>${p[0]}</h3><p clas
  $('#pa').onclick=()=>p[3]?go(p[3]):p[4]?awardPoints(p[4]):toast(i!==2?'Titik laporan ini tidak memberi poin.':'Laporan sudah ditutup.')}
 pin(0);
 
-/* Lapor */
-$('#scan').onclick=()=>{$('#scan').innerHTML='<div>✅ Objek terdeteksi: limbah padat (96,4%)<br>Volume ±1,8 m³</div>';$('#ai').style.display='block'};
+/* Laporan warga */
+$('#reportPhoto').addEventListener('change',e=>{
+ const file=e.target.files[0];
+ if(reportPhotoUrl)URL.revokeObjectURL(reportPhotoUrl);
+ reportPhotoUrl=null;
+ $('#photoPreview').hidden=true;
+ if(!file){$('#photoInfo').textContent='JPG, PNG, atau WebP. Maksimal 5 MB.';return}
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type)){
+  e.target.value='';
+  $('#photoInfo').textContent='Format foto tidak didukung. Pilih JPG, PNG, atau WebP.';
+  return;
+ }
+ if(file.size>5*1024*1024){
+  e.target.value='';
+  $('#photoInfo').textContent='Ukuran foto melebihi 5 MB.';
+  return;
+ }
+ reportPhotoUrl=URL.createObjectURL(file);
+ $('#photoPreview').src=reportPhotoUrl;
+ $('#photoPreview').hidden=false;
+ $('#photoInfo').textContent=`${file.name} • ${(file.size/1024/1024).toFixed(2)} MB`;
+});
+
+$('#reportLocationButton').onclick=()=>{
+ if(!window.isSecureContext||!navigator.geolocation){
+  $('#locationInfo').textContent='GPS tidak tersedia. Ketik lokasi secara manual.';
+  return;
+ }
+ const button=$('#reportLocationButton');
+ button.disabled=true;
+ $('#locationInfo').textContent='Mengambil lokasi...';
+ navigator.geolocation.getCurrentPosition(position=>{
+  reportCoordinates={
+   latitude:position.coords.latitude,
+   longitude:position.coords.longitude
+  };
+  if(!$('#reportLocation').value.trim()){
+   $('#reportLocation').value=`GPS ${reportCoordinates.latitude.toFixed(5)}, ${reportCoordinates.longitude.toFixed(5)}`;
+  }
+  $('#locationInfo').textContent='Koordinat GPS akan disimpan bersama laporan.';
+  button.disabled=false;
+ },error=>{
+  $('#locationInfo').textContent=error.code===1
+   ?'Izin lokasi ditolak. Anda tetap bisa mengetik lokasi.'
+   :'Lokasi tidak ditemukan. Anda tetap bisa mengetik lokasi.';
+  button.disabled=false;
+ },{enableHighAccuracy:true,timeout:10000,maximumAge:60000});
+};
+
 $('#desc').oninput=e=>$('#cnt').textContent=e.target.value.length+'/300';
 $$('#urg button').forEach(b=>b.onclick=()=>$$('#urg button').forEach(x=>x.classList.toggle('on',x===b)));
-$('#send').onclick=()=>{
- if(!$('#ai').style.display||$('#ai').style.display==='none'){toast('Pindai foto dulu supaya AI bisa menganalisis');return}
- $('#track').style.display='block';$('#track').scrollIntoView({behavior:'smooth'});toast('Laporan terkirim ke Dinas LH Samosir')};
+$('#reportForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ if(!auth||!activeUserId){
+  toast('Masuk ke akun terlebih dahulu untuk mengirim laporan.');
+  go('login');
+  return;
+ }
+ const userId=activeUserId;
+ const file=$('#reportPhoto').files[0];
+ if(!file){toast('Pilih foto bukti terlebih dahulu.');return}
+ const locationLabel=$('#reportLocation').value.trim();
+ if(!locationLabel){$('#reportLocation').focus();toast('Isi lokasi laporan terlebih dahulu.');return}
+ const button=$('#send');
+ button.disabled=true;
+ button.textContent='Mengirim laporan...';
+ $('#track').style.display='none';
+ let photoPath=null;
+ let photoUploaded=false;
+ try{
+  const preparedPhoto=await prepareReportPhoto(file);
+  if(preparedPhoto.size>5*1024*1024)throw new Error('Foto setelah diproses masih melebihi 5 MB.');
+  const objectId=window.crypto?.randomUUID
+   ?window.crypto.randomUUID()
+   :`${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  photoPath=`${userId}/${objectId}.jpg`;
+  const {error:uploadError}=await auth.storage.from(REPORT_BUCKET).upload(photoPath,preparedPhoto,{
+   contentType:'image/jpeg',
+   cacheControl:'3600',
+   upsert:false
+  });
+  if(uploadError)throw new Error(`Unggah foto gagal: ${uploadError.message}`);
+  photoUploaded=true;
+
+  const {data:report,error:insertError}=await auth.from('reports').insert({
+   user_id:userId,
+   category:$('#reportCategory').value,
+   urgency:$('#urg button.on').dataset.value,
+   description:$('#desc').value.trim(),
+   location_label:locationLabel,
+   latitude:reportCoordinates.latitude,
+   longitude:reportCoordinates.longitude,
+   photo_path:photoPath
+  }).select('id').single();
+  if(insertError){
+   const {error:cleanupError}=await auth.storage.from(REPORT_BUCKET).remove([photoPath]);
+   if(cleanupError){
+    photoUploaded=false;
+    throw new Error(`Laporan gagal disimpan: ${insertError.message}. Pembersihan foto juga gagal: ${cleanupError.message}`);
+   }
+   photoUploaded=false;
+   photoPath=null;
+   throw new Error(`Laporan gagal disimpan: ${insertError.message}`);
+  }
+
+  photoUploaded=false;
+  photoPath=null;
+  showSavedReport(report.id);
+  $('#reportForm').reset();
+  if(reportPhotoUrl)URL.revokeObjectURL(reportPhotoUrl);
+  reportPhotoUrl=null;
+  $('#photoPreview').removeAttribute('src');
+  $('#photoPreview').hidden=true;
+  $('#photoInfo').textContent='JPG, PNG, atau WebP. Maksimal 5 MB.';
+  $('#locationInfo').textContent='Lokasi GPS opsional; Anda juga dapat mengetik lokasi.';
+  reportCoordinates={latitude:null,longitude:null};
+  $$('#urg button').forEach(option=>option.classList.toggle('on',option.dataset.value==='medium'));
+  await loadMyReports();
+  toast('Laporan dan foto berhasil disimpan.');
+ }catch(error){
+  let message=error.message||'Terjadi kesalahan yang tidak diketahui.';
+  if(photoUploaded&&photoPath){
+   const {error:cleanupError}=await auth.storage.from(REPORT_BUCKET).remove([photoPath]);
+   if(cleanupError)message+=` Foto sementara juga gagal dibersihkan: ${cleanupError.message}`;
+  }
+  toast(`Laporan gagal dikirim: ${message}`);
+ }finally{
+  button.disabled=false;
+  button.textContent='Kirim laporan';
+ }
+});
 
 /* Komunitas */
 $$('.join').forEach(b=>b.onclick=async()=>{
@@ -539,7 +773,6 @@ $('#newAct').onclick=()=>toast('Fitur buat aksi baru segera hadir');
 
 /* Sampah & Rute */
 $('#setor').onclick=async()=>{await awardPoints('waste:deposit-demo')};
-$('#scanLain').onclick=()=>toast('Arahkan kamera ke sampah berikutnya');
 $('#pilihRute').onclick=async()=>{await awardPoints('route:green-demo')};
 
 /* Profil: nama & foto (disimpan di perangkat pengguna) */

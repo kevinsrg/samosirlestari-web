@@ -50,6 +50,23 @@ python -m http.server 5500
 
 Lalu buka `http://localhost:5500`.
 
+## Laporan foto di Supabase
+
+Form laporan mengunggah foto ke bucket privat `report-photos` dan menyimpan
+detailnya ke tabel `public.reports`. Data serta foto hanya dapat dibaca pemilik
+akun; laporan belum dipublikasikan ke feed umum.
+
+Jalankan [supabase-reports.sql](supabase-reports.sql) satu kali melalui
+`Supabase Dashboard -> SQL Editor -> New query -> Run`. Skrip ini membuat tabel,
+bucket privat, dan Row Level Security untuk akun. Unggahan dibatasi sampai 5 MB;
+browser mengecilkan foto dan mengubahnya ke JPEG sebelum diunggah.
+
+Setelah SQL berhasil dijalankan, buka situs melalui HTTPS atau localhost,
+masuk ke akun, lalu gunakan **Lapor Masalah**. Pilih foto, kategori, isi lokasi
+dan keterangan, lalu kirim. GPS bersifat opsional. Laporan baru berstatus
+`Menunggu verifikasi`; menu **Laporan saya** menampilkan laporan dan foto yang
+tersimpan.
+
 ## Saldo poin per akun
 
 Saldo setiap akun dimulai dari **0** dan disimpan di Supabase, bukan di browser.
