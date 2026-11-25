@@ -11,8 +11,11 @@ Proyek ini sudah terhubung ke alur autentikasi Supabase di sisi browser:
 - Login email dan kata sandi
 - Sesi login yang tersimpan otomatis
 - Konfirmasi email Supabase
+- Pemulihan kata sandi melalui email
 - Logout
 - Sinkronisasi nama profil ke metadata akun
+- Mode tamu hanya untuk menjelajah; perubahan profil dan pengiriman laporan
+  memerlukan akun
 
 ### 1. Buat project Supabase
 
@@ -41,6 +44,10 @@ Di Supabase Dashboard:
 3. Tentukan apakah konfirmasi email wajib melalui opsi `Confirm email`.
 4. Tambahkan URL situs produksi ke:
    `Authentication -> URL Configuration -> Redirect URLs`.
+5. Untuk pemulihan kata sandi, tambahkan URL berikut sebagai Redirect URL:
+   `https://kevinsrg.github.io/samosirlestari-web/?password-reset=1`.
+   Untuk pengujian lokal, tambahkan
+   `http://localhost:5500/index.html?password-reset=1`.
 
 Untuk pengujian lokal, buka situs melalui server HTTP, bukan hanya double-click file:
 
@@ -87,7 +94,8 @@ Aplikasi saat ini tidak memberikan poin dari tombol demo karena setoran,
 perjalanan, dukungan, dan kehadiran belum diverifikasi. Saldo maupun riwayat poin
 lama tidak dihapus atau diubah otomatis; saldo lama mungkin masih berisi poin
 demo yang diberikan sebelum perubahan ini dan belum dapat dianggap sebagai
-hadiah terverifikasi.
+hadiah terverifikasi. Saldo ditampilkan sebagai notifikasi di dalam aplikasi,
+bukan sebagai halaman poin tersendiri.
 
 ### 4. SQL profil tambahan (opsional)
 

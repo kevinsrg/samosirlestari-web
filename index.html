@@ -22,6 +22,7 @@ h1{font-size:22px;line-height:1.2}h2{font-size:16px;margin:18px 0 8px}h3{font-si
 .logo{font-weight:800;color:var(--accent-text)}.logo small{display:block;font-weight:500;color:var(--mut);font-size:11px}
 .pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--g1);color:var(--accent-text);white-space:nowrap}
 .pill.r{background:#fde4e4;color:var(--red)}.pill.a{background:#fdf0cf;color:#9a6a00}.pill.b{background:#dcebfb;color:#1d5fa6}
+.points-notice{border:0;font:inherit;font-size:11px;font-weight:700;cursor:pointer}.points-notice:focus-visible{outline:3px solid var(--blu);outline-offset:2px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
 .row{display:flex;align-items:center;gap:10px}.sp{flex:1}.mut{color:var(--mut);font-size:12px}
 .btn{width:100%;border:0;border-radius:12px;background:var(--g7);color:#fff;font:inherit;font-weight:700;padding:13px;cursor:pointer;margin-top:8px}
@@ -134,7 +135,20 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
    <label for="loginPassword">Kata sandi</label><input id="loginPassword" type="password" autocomplete="current-password" required>
    <button class="btn" type="submit">Masuk</button>
   </form>
+  <p class="mut" style="text-align:center;margin-top:12px"><button class="lnk" type="button" id="forgotPasswordButton">Lupa kata sandi?</button></p>
   <p class="mut" style="text-align:center;margin-top:12px">Belum punya akun? <button class="lnk" type="button" data-go="signup">Daftar akun</button></p>
+ </div>
+</section>
+
+<section class="screen" id="passwordReset">
+ <div class="auth-page">
+  <button class="btn s" style="align-self:flex-start" data-go="login">← Kembali ke masuk</button>
+  <h1>Atur kata sandi baru</h1><p class="mut">Pilih kata sandi baru untuk akunmu.</p>
+  <form id="passwordResetForm">
+   <label for="newPassword">Kata sandi baru (minimal 8 karakter)</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+   <label for="confirmNewPassword">Ulangi kata sandi baru</label><input id="confirmNewPassword" type="password" autocomplete="new-password" minlength="8" required>
+   <button class="btn" type="submit">Simpan kata sandi baru</button>
+  </form>
  </div>
 </section>
 
@@ -156,7 +170,7 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 
 <!-- BERANDA -->
 <section class="screen" id="home">
- <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">SamosirLestari<small>Kabupaten Samosir</small></div><span class="sp"></span><span class="pill">🪙 <span class="points-value">0</span> Poin</span><button class="avs" data-go="profil" aria-label="Buka profil"><span class="ae">🙂</span></button></div>
+ <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">SamosirLestari<small>Kabupaten Samosir</small></div><span class="sp"></span><button class="pill points-notice" type="button" data-points-notice aria-label="Lihat notifikasi saldo poin">🪙 <span class="points-value">—</span> Poin</button><button class="avs" data-go="profil" aria-label="Buka profil"><span class="ae">🙂</span></button></div>
  <h1>Halo, <span class="uname">Pengguna</span> 👋</h1><p class="mut">Kabupaten Samosir</p>
  <div class="card" style="margin-top:12px"><h3>Laporan lingkungan warga</h3>
   <p class="mut">Kirim foto dan detail masalah yang kamu temukan. Laporan tersimpan privat di akunmu untuk ditinjau.</p>
@@ -195,7 +209,11 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 <section class="screen" id="lapor">
  <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Laporan Warga</h3></div>
  <p class="mut">Unggah foto dan isi detailnya. Laporan serta foto disimpan privat di akun Anda.</p>
- <form id="reportForm">
+ <div id="reportAuthPrompt" class="card" role="status">
+  <p class="mut">Mode tamu hanya dapat melihat konten. Masuk atau daftar untuk mengirim laporan.</p>
+  <button class="btn s" type="button" data-go="login">Masuk untuk melapor</button>
+ </div>
+ <form id="reportForm" hidden>
   <label for="reportPhoto">Foto bukti</label>
   <input id="reportPhoto" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" required>
   <p class="mut" id="photoInfo">JPG, PNG, atau WebP. Maksimal 5 MB.</p>
@@ -236,9 +254,9 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 
 <!-- PROFIL -->
 <section class="screen" id="profil">
- <div class="card" style="text-align:center"><button class="av" id="avBtn" aria-label="Ganti foto profil"><span class="ae">🙂</span><em>📷</em></button><input type="file" id="avFile" accept="image/*" hidden><button class="lnk" id="avDel" style="display:none">Hapus foto</button>
-  <h3 id="nameRow"><span class="uname">Pengguna</span> <button class="btn s" id="nameEdit" aria-label="Ubah nama">✏️ Ubah</button></h3><div id="nameBox" style="display:none;margin:6px 0"><input type="text" id="nameIn" maxlength="30" aria-label="Nama kamu" placeholder="Nama kamu"><div class="row" style="margin-top:6px;justify-content:center"><button class="btn s" id="nameSave">Simpan</button><button class="btn s" id="nameCancel" style="background:transparent;border:1px solid var(--line)">Batal</button></div></div><p class="mut">Akun warga • Kabupaten Samosir</p>
-  <div class="row" style="justify-content:center;margin-top:8px"><b>🪙 <span class="points-value">0</span> Poin Kontribusi</b></div></div>
+ <div class="card" style="text-align:center"><button class="av" id="avBtn" aria-label="Ganti foto profil"><span class="ae">🙂</span><em>📷</em></button><input type="file" id="avFile" accept="image/*" hidden><button class="lnk" id="avDel" hidden>Hapus foto</button>
+  <h3 id="nameRow"><span class="uname">Tamu</span> <button class="btn s" id="nameEdit" aria-label="Ubah nama" hidden>✏️ Ubah</button></h3><div id="nameBox" style="display:none;margin:6px 0"><input type="text" id="nameIn" maxlength="30" aria-label="Nama kamu" placeholder="Nama kamu"><div class="row" style="margin-top:6px;justify-content:center"><button class="btn s" id="nameSave">Simpan</button><button class="btn s" id="nameCancel" style="background:transparent;border:1px solid var(--line)">Batal</button></div></div><p class="mut" id="accountMode">Mode tamu • Jelajah saja</p>
+  <div class="row" style="justify-content:center;margin-top:8px"><button class="pill points-notice" type="button" data-points-notice aria-label="Lihat notifikasi saldo poin">🪙 <span class="points-value">—</span> Poin</button></div></div>
  <div id="profileImpactEmpty" class="card" role="status" style="text-align:center">
   <b id="profileImpactMessage">Masuk untuk melihat statistik laporan</b><p id="profileImpactHint" class="mut">Data laporan hanya ditampilkan untuk akun pemilik.</p>
  </div>
@@ -252,9 +270,10 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
  </div>
  <h2>Pengaturan &amp; layanan warga</h2>
  <div class="card" data-go="lapor" style="cursor:pointer"><b>Riwayat laporan saya</b><p class="mut">Pantau laporan dan foto yang tersimpan</p></div>
-  <div class="card"><b>Notifikasi</b><p class="mut">Notifikasi belum tersedia.</p></div>
+  <div class="card"><b>Notifikasi poin</b><p class="mut">Ketuk saldo poin untuk melihat notifikasi saldo terbaru.</p></div>
   <div class="card"><b>Panduan warga</b><p class="mut">Gunakan formulir laporan untuk mengirim foto, kategori, dan lokasi masalah.</p></div>
- <button class="btn o" id="logoutButton" style="color:var(--red);border-color:var(--red)">Keluar akun</button>
+ <button class="btn o" id="logoutButton" style="color:var(--red);border-color:var(--red)" hidden>Keluar akun</button>
+ <button class="btn" id="guestLoginButton" data-go="login">Masuk atau daftar untuk berkontribusi</button>
  <p class="mut" style="text-align:center;margin-top:8px">SamosirLestari Samosir v2.4.1</p>
 </section>
 
@@ -296,11 +315,17 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2200)}
 function go(id){
+ if(passwordRecoveryMode&&id!=='passwordReset'){
+  passwordRecoveryMode=false;
+  const cleanUrl=new URL(window.location.href);
+  cleanUrl.searchParams.delete('password-reset');
+  cleanUrl.hash='';
+  history.replaceState(null,'',cleanUrl.pathname+cleanUrl.search);
+ }
  $$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
  const main=['home','peta','lapor','komunitas','profil'];
  $('#nav').style.display=main.includes(id)?'flex':'none';
  $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
- if(id==='tukar'){}
  $('#main').scrollTop=0;
  if(id==='lapor')loadMyReports();
  if(id==='profil'){
@@ -313,10 +338,13 @@ function go(id){
  }
 }
 document.addEventListener('click',e=>{
- const t=e.target.closest('[data-go]');if(!t)return;
- let id=t.dataset.go;
- if(id==='tukar'){go('profil');setTimeout(()=>$('#tukar').scrollIntoView({behavior:'smooth'}),50);return}
- go(id);
+ const pointButton=e.target.closest('[data-points-notice]');
+ if(pointButton){
+  if(!activeUserId){toast('Masuk untuk melihat saldo poin akunmu.');return}
+  toast(`Notifikasi poin • saldo saat ini ${pointsBalance.toLocaleString('id-ID')} poin.`);
+  return;
+ }
+ const t=e.target.closest('[data-go]');if(t)go(t.dataset.go);
 });
 
 /* Onboarding */
@@ -343,6 +371,7 @@ const authConfigured=Boolean(
 const auth=authConfigured?window.supabase.createClient(supabaseUrl,supabaseAnonKey):null;
 let activeUserId=null;
 let pointsBalance=0;
+let pointsUserId=null;
 let profileStats=null;
 let profileStatsLoading=false;
 let profileStatsError='';
@@ -351,9 +380,11 @@ let LM=null,me=null,mapReportLayer=null,mapReportRequestId=0;
 const REPORT_BUCKET='report-photos';
 let reportCoordinates={latitude:null,longitude:null};
 let reportPhotoUrl=null;
+let passwordRecoveryMode=new URLSearchParams(window.location.search).has('password-reset');
 
 function renderPoints(){
- $$('.points-value').forEach(e=>e.textContent=pointsBalance.toLocaleString('id-ID'));
+ const value=activeUserId?pointsBalance.toLocaleString('id-ID'):'—';
+ $$('.points-value').forEach(e=>e.textContent=value);
 }
 
 function renderProfileStats(){
@@ -440,9 +471,13 @@ async function loadProfileStats(user){
 
 async function loadPoints(user){
  if(!auth||!user)return {ok:false,message:'Saldo poin tidak tersedia.'};
+ const previousUserId=pointsUserId;
+ const previousBalance=pointsBalance;
  activeUserId=user.id;
- pointsBalance=0;
- renderPoints();
+ if(pointsUserId!==user.id){
+  pointsBalance=0;
+  renderPoints();
+ }
  const {data,error}=await auth.from('point_balances').select('points').eq('user_id',user.id).maybeSingle();
  if(error){
   return {ok:false,message:`Saldo poin gagal dimuat: ${error.message}`};
@@ -451,8 +486,12 @@ async function loadPoints(user){
   return {ok:false,message:'Saldo akun belum dibuat. Jalankan supabase-points.sql di Supabase.'};
  }
  if(activeUserId!==user.id)return {ok:false,message:'Akun berubah sebelum saldo poin selesai dimuat.'};
+ pointsUserId=user.id;
  pointsBalance=Number(data.points);
  renderPoints();
+ if(previousUserId===user.id&&previousBalance!==pointsBalance){
+  toast(`Notifikasi poin • saldo berubah menjadi ${pointsBalance.toLocaleString('id-ID')} poin.`);
+ }
  return {ok:true};
 }
 
@@ -572,25 +611,32 @@ async function applyAuthenticatedUser(user){
  if(name){
   prof.name=name;
   try{localStorage.setItem(PK,JSON.stringify(prof))}catch(e){}
-  renderProf();
  }
+ renderProf();
  return pointResult;
 }
 
 if(auth){
  auth.auth.getSession().then(async({data:{session}})=>{
-  if(session){
+  if(session&&!passwordRecoveryMode){
    const result=await applyAuthenticatedUser(session.user);
    if(!result.ok)toast(result.message);
    go('home');
   }
  });
- auth.auth.onAuthStateChange((_event,session)=>{
+ auth.auth.onAuthStateChange((event,session)=>{
+  if(event==='PASSWORD_RECOVERY'){
+   passwordRecoveryMode=true;
+   go('passwordReset');
+   return;
+  }
   if(session){
+   if(passwordRecoveryMode)return;
    applyAuthenticatedUser(session.user).then(result=>{if(!result.ok)toast(result.message)});
   }else{
    activeUserId=null;
    pointsBalance=0;
+   pointsUserId=null;
    profileStats=null;
    profileStatsLoading=false;
    profileStatsError='';
@@ -605,6 +651,43 @@ if(auth){
   }
  });
 }
+
+$('#forgotPasswordButton').onclick=async()=>{
+ const email=$('#loginEmail').value.trim();
+ if(!email){$('#loginEmail').focus();toast('Masukkan email akunmu terlebih dahulu.');return}
+ if(!auth){toast('Autentikasi belum dikonfigurasi.');return}
+ const button=$('#forgotPasswordButton');
+ button.disabled=true;
+ const redirectTo=new URL(window.location.pathname,window.location.origin);
+ redirectTo.searchParams.set('password-reset','1');
+ const {error}=await auth.auth.resetPasswordForEmail(email,{redirectTo:redirectTo.toString()});
+ button.disabled=false;
+ if(error){toast(`Tautan reset gagal dikirim: ${error.message}`);return}
+ toast('Jika email terdaftar, tautan reset kata sandi akan dikirim.');
+};
+
+$('#passwordResetForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const password=$('#newPassword').value;
+ if(password.length<8){toast('Kata sandi minimal 8 karakter.');$('#newPassword').focus();return}
+ if(password!==$('#confirmNewPassword').value){toast('Kata sandi belum sama.');$('#confirmNewPassword').focus();return}
+ if(!auth){toast('Autentikasi belum dikonfigurasi.');return}
+ if(!passwordRecoveryMode){toast('Buka tautan pemulihan dari email untuk mengatur kata sandi.');return}
+ const button=e.submitter;
+ button.disabled=true;
+ const {data,error}=await auth.auth.updateUser({password});
+ button.disabled=false;
+ if(error){toast(`Kata sandi gagal diperbarui: ${error.message}`);return}
+ passwordRecoveryMode=false;
+ if(data.user)await applyAuthenticatedUser(data.user);
+ const cleanUrl=new URL(window.location.href);
+ cleanUrl.searchParams.delete('password-reset');
+ cleanUrl.hash='';
+ history.replaceState(null,'',cleanUrl.pathname+cleanUrl.search);
+ $('#passwordResetForm').reset();
+ toast('Kata sandi berhasil diperbarui.');
+ go('home');
+});
 
 $('#loginForm').addEventListener('submit',async e=>{
  e.preventDefault();
@@ -621,7 +704,7 @@ $('#loginForm').addEventListener('submit',async e=>{
   return;
  }
  const pointResult=await applyAuthenticatedUser(data.user);
- toast(pointResult.ok?'Berhasil masuk':`Berhasil masuk, tetapi ${pointResult.message}`);
+ toast(pointResult.ok?`Berhasil masuk • saldo poin ${pointsBalance.toLocaleString('id-ID')}`:`Berhasil masuk, tetapi ${pointResult.message}`);
  $('#loginForm').reset();
  go('home');
 });
@@ -791,18 +874,31 @@ $('#reportForm').addEventListener('submit',async e=>{
  }
 });
 
-/* Profil: nama & foto (disimpan di perangkat pengguna) */
+/* Profil: nama akun dan foto lokal */
 const PK='tl_profile';let prof={name:'Pengguna',photo:''};
 try{const s=localStorage.getItem(PK);if(s)prof=Object.assign(prof,JSON.parse(s))}catch(e){}
 function saveProf(){try{localStorage.setItem(PK,JSON.stringify(prof))}catch(e){toast('Belum bisa disimpan permanen di perangkat ini')}}
 function renderProf(){
- $$('.uname').forEach(e=>e.textContent=prof.name);
- $$('.av,.avs').forEach(e=>{e.style.backgroundImage=prof.photo?'url('+prof.photo+')':'';e.querySelector('.ae').style.display=prof.photo?'none':''});
- $('#avDel').style.display=prof.photo?'inline-block':'none';
+ const canEdit=Boolean(auth&&activeUserId);
+ const photo=canEdit?prof.photo:'';
+ if(!canEdit){$('#nameBox').style.display='none';$('#nameRow').style.display=''}
+ $$('.uname').forEach(e=>e.textContent=canEdit?prof.name:'Tamu');
+ $$('.av,.avs').forEach(e=>{e.style.backgroundImage=photo?'url('+photo+')':'';e.querySelector('.ae').style.display=photo?'none':''});
+ $('#avBtn').disabled=!canEdit;
+ $('#avBtn em').hidden=!canEdit;
+ $('#avFile').disabled=!canEdit;
+ $('#avDel').hidden=!canEdit||!prof.photo;
+ $('#nameEdit').hidden=!canEdit;
+ $('#accountMode').textContent=canEdit?'Akun warga • Kabupaten Samosir':'Mode tamu • Jelajah saja';
+ $('#logoutButton').hidden=!canEdit;
+ $('#guestLoginButton').hidden=canEdit;
+ $('#reportForm').hidden=!canEdit;
+ $('#reportAuthPrompt').hidden=canEdit;
 }
-$('#avBtn').onclick=()=>$('#avFile').click();
+$('#avBtn').onclick=()=>{if(!activeUserId){toast('Masuk ke akun untuk mengubah foto profil.');return}$('#avFile').click()};
 $('#avFile').onchange=e=>{
  const f=e.target.files[0];if(!f)return;
+ if(!activeUserId){e.target.value='';toast('Masuk ke akun untuk mengubah foto profil.');return}
  if(!f.type.startsWith('image/')){toast('Pilih file gambar (JPG atau PNG)');return}
  const r=new FileReader();
  r.onerror=()=>toast('Foto tidak bisa dibaca, coba foto lain');
@@ -814,20 +910,25 @@ $('#avFile').onchange=e=>{
   im.src=r.result};
  r.readAsDataURL(f);e.target.value='';
 };
-$('#avDel').onclick=()=>{prof.photo='';saveProf();renderProf();toast('Foto profil dihapus')};
-function nameBox(open){$('#nameBox').style.display=open?'block':'none';$('#nameRow').style.display=open?'none':'';if(open){$('#nameIn').value=prof.name;$('#nameIn').focus()}}
+$('#avDel').onclick=()=>{if(!activeUserId){toast('Masuk ke akun untuk mengubah foto profil.');return}prof.photo='';saveProf();renderProf();toast('Foto profil dihapus')};
+function nameBox(open){
+  if(open&&!activeUserId){toast('Masuk ke akun untuk mengubah nama profil.');return}
+  $('#nameBox').style.display=open?'block':'none';
+  $('#nameRow').style.display=open?'none':'';
+  if(open){$('#nameIn').value=prof.name;$('#nameIn').focus()}
+}
 $('#nameEdit').onclick=()=>nameBox(true);
 $('#nameCancel').onclick=()=>nameBox(false);
 async function saveName(){const v=$('#nameIn').value.trim().replace(/\s+/g,' ');
+  if(!auth||!activeUserId){toast('Masuk ke akun untuk mengubah nama profil.');nameBox(false);return}
  if(v.length<2){toast('Nama minimal 2 huruf');return}
- if(auth){
   const {error}=await auth.auth.updateUser({data:{full_name:v}});
   if(error){toast(error.message);return}
- }
  prof.name=v;saveProf();renderProf();nameBox(false);toast('Nama diperbarui')}
 $('#nameSave').onclick=saveName;
 $('#nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')saveName();if(e.key==='Escape')nameBox(false)});
 $('#logoutButton').onclick=async()=>{
+ if(!activeUserId){go('login');return}
  if(auth){
   const {error}=await auth.auth.signOut();
   if(error){toast(error.message);return}
@@ -839,6 +940,7 @@ $('#logoutButton').onclick=async()=>{
  go('onb');
 };
 renderProf();
+if(passwordRecoveryMode)go('passwordReset');
 
 /* Peta asli (Leaflet + OpenStreetMap) */
 function initMap(){
