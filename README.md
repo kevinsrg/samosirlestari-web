@@ -50,6 +50,26 @@ python -m http.server 5500
 
 Lalu buka `http://localhost:5500`.
 
+## Saldo poin per akun
+
+Saldo setiap akun dimulai dari **0** dan disimpan di Supabase, bukan di browser.
+Jalankan [supabase-points.sql](supabase-points.sql) satu kali di
+`Supabase Dashboard -> SQL Editor -> New query -> Run`. Skrip ini membuat
+saldo nol untuk akun lama dan akun baru, serta mengaktifkan kebijakan agar
+pengguna hanya dapat membaca saldo dan riwayat poin miliknya sendiri.
+
+Bonus demo yang saat ini tersedia hanya dapat diterima satu kali per akun:
+
+- Dukung tiap laporan contoh: 5 poin per laporan
+- Catat setoran sampah contoh: 10 poin
+- Pilih rute hijau contoh: 25 poin
+- Gabung aksi bersih-bersih contoh: 100 poin
+
+Setelah SQL dijalankan, login ulang untuk memuat saldo. Tombol aksi saat ini
+masih berupa demo dan belum memverifikasi setoran, perjalanan, atau kehadiran
+di server. Sebelum digunakan sebagai sistem hadiah produksi, sambungkan aksi
+ke data transaksi yang terverifikasi di server.
+
 ### 4. SQL profil tambahan (opsional)
 
 Jika profil perlu disimpan sebagai tabel database, jalankan SQL berikut di Supabase SQL Editor:

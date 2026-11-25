@@ -154,8 +154,8 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 
 <!-- BERANDA -->
 <section class="screen" id="home">
- <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">SamosirLestari<small>Kabupaten Samosir</small></div><span class="sp"></span><span class="pill">🪙 1.420 Poin</span><button class="avs" data-go="profil" aria-label="Buka profil"><span class="ae">🙂</span></button></div>
- <h1>Halo, <span class="uname">Pengguna</span> 👋</h1><p class="mut">Warga Peduli (Level 3) • Kabupaten Samosir</p>
+ <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">SamosirLestari<small>Kabupaten Samosir</small></div><span class="sp"></span><span class="pill">🪙 <span class="points-value">0</span> Poin</span><button class="avs" data-go="profil" aria-label="Buka profil"><span class="ae">🙂</span></button></div>
+ <h1>Halo, <span class="uname">Pengguna</span> 👋</h1><p class="mut">Warga Peduli (Level 1) • Kabupaten Samosir</p>
  <div class="card" style="margin-top:12px"><div class="score"><div class="ring" style="--p:84"><i>84</i></div>
   <div><h3>Skor Lingkungan Anda</h3><p class="mut">Sangat baik (+4 minggu ini)</p><p class="mut">Kualitas udara: AQI 58 • Sedang</p><p class="mut">Tuntas hari ini: 3 masalah kota</p></div></div></div>
  <h2>Aksi cepat warga</h2>
@@ -221,7 +221,7 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
   <p class="mut"><span class="dt" data-dow="6"></span> • 07:00–10:00 WIB<br>Pantai Pasir Putih Parbaba &amp; Kawasan Pangururan</p>
   <p style="font-size:12px;margin:6px 0">🎁 +100 Poin Kontribusi + e-sertifikat</p>
   <div class="bar"><i style="width:80%"></i></div><p class="mut">48 / 60 warga • Sisa 12 slot</p>
-  <button class="btn join">Gabung aksi sekarang</button></div>
+  <button class="btn join" data-action-key="community:cleanup-demo">Gabung aksi sekarang</button></div>
  <div class="card"><span class="pill a">Urban farming • 09:00 WIB</span><h3 style="margin-top:6px">Workshop urban farming &amp; kompos mandiri desa</h3>
   <p class="mut"><span class="dt" data-dow="0"></span> • Balai Desa Simanindo</p><div class="row" style="margin-top:6px"><span class="mut">28 warga terdaftar</span><span class="sp"></span><button class="btn s join">Gabung</button></div></div>
  <div class="card"><span class="pill b">Bank sampah • Sabtu rutin</span><h3 style="margin-top:6px">Setor minyak jelantah &amp; kardus daur ulang</h3>
@@ -232,8 +232,8 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 <!-- PROFIL -->
 <section class="screen" id="profil">
  <div class="card" style="text-align:center"><button class="av" id="avBtn" aria-label="Ganti foto profil"><span class="ae">🙂</span><em>📷</em></button><input type="file" id="avFile" accept="image/*" hidden><button class="lnk" id="avDel" style="display:none">Hapus foto</button>
-  <h3 id="nameRow"><span class="uname">Pengguna</span> <span class="pill">Lv. 3</span> <button class="btn s" id="nameEdit" aria-label="Ubah nama">✏️ Ubah</button></h3><div id="nameBox" style="display:none;margin:6px 0"><input type="text" id="nameIn" maxlength="30" aria-label="Nama kamu" placeholder="Nama kamu"><div class="row" style="margin-top:6px;justify-content:center"><button class="btn s" id="nameSave">Simpan</button><button class="btn s" id="nameCancel" style="background:transparent;border:1px solid var(--line)">Batal</button></div></div><p class="mut">Warga terverifikasi NIK • Pahlawan Hijau Kota<br>#KH-82914 • Kabupaten Samosir</p>
-  <div class="row" style="justify-content:center;margin-top:8px"><b>🪙 1.420 Poin Kontribusi</b></div></div>
+  <h3 id="nameRow"><span class="uname">Pengguna</span> <span class="pill">Lv. 1</span> <button class="btn s" id="nameEdit" aria-label="Ubah nama">✏️ Ubah</button></h3><div id="nameBox" style="display:none;margin:6px 0"><input type="text" id="nameIn" maxlength="30" aria-label="Nama kamu" placeholder="Nama kamu"><div class="row" style="margin-top:6px;justify-content:center"><button class="btn s" id="nameSave">Simpan</button><button class="btn s" id="nameCancel" style="background:transparent;border:1px solid var(--line)">Batal</button></div></div><p class="mut">Warga terverifikasi NIK • Pahlawan Hijau Kota<br>#KH-82914 • Kabupaten Samosir</p>
+  <div class="row" style="justify-content:center;margin-top:8px"><b>🪙 <span class="points-value">0</span> Poin Kontribusi</b></div></div>
  <h2>Dampak nyata Anda <span class="mut yr">Tahun</span></h2>
  <div class="grid2"><div class="card"><h1>18</h1><p class="mut">Laporan ditangani</p></div><div class="card"><h1>46,2 kg</h1><p class="mut">CO₂ berkurang (≈ 4 bibit pohon)</p></div></div>
  <div class="card"><h1>12</h1><p class="mut">Aksi diikuti: gotong royong &amp; bank sampah desa</p></div>
@@ -259,7 +259,7 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
  <ol class="steps card"><li><span class="dot">1</span><div><b>Kosongkan &amp; bilas</b><br><span class="mut">Buang sisa air, bilas sebentar agar tidak bau.</span></div></li>
  <li><span class="dot">2</span><div><b>Lepas tutup &amp; label luar</b><br><span class="mut">Tutup botol dan segel punya titik lebur berbeda.</span></div></li>
  <li><span class="dot">3</span><div><b>Remas &amp; pipihkan</b><br><span class="mut">Volume mengecil hingga 70%.</span></div></li></ol>
- <button class="btn" id="setor">Catat setoran sampah (+10 Poin)</button><button class="btn o" id="scanLain">Pindai sampah lain</button>
+ <button class="btn" id="setor">Catat setoran sampah (+10 Poin, sekali)</button><button class="btn o" id="scanLain">Pindai sampah lain</button>
  <h2>Titik setor terdekat</h2>
  <div class="card"><div class="row"><div><b>Bank Sampah Desa Pangururan (contoh)</b><p class="mut">350 m • Buka s.d. 16:00 WIB • Plastik, kertas, kardus</p></div><span class="pill">Terverifikasi</span></div></div>
  <div class="card"><div class="row"><div><b>Smart Drop Box</b><p class="mut">600 m • Buka 24 jam • Scan botol &amp; tukar poin otomatis</p></div><span class="pill b">Siap pakai</span></div></div>
@@ -272,7 +272,7 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
   <label>Tujuan</label><input type="text" value="Pelabuhan Tomok" aria-label="Tujuan"></div>
  <div class="card" style="border:2px solid var(--g5)"><span class="pill">Rekomendasi AI • Emisi terendah • Efisiensi 98%</span>
   <h3 style="margin-top:6px">Jalan santai + shuttle bus kawasan Samosir</h3><p class="mut">Jalan kaki 400 m, naik dari Halte Pangururan Kota</p>
-  <div class="grid2" style="margin-top:8px"><div><b>22 menit</b><p class="mut">Estimasi waktu</p></div><div><b>0,12 kg CO₂e</b><p class="mut">Hemat 85% vs mobil</p></div><div><b>Rp 5.000</b><p class="mut">Tarif</p></div><div><b>+25 Poin Kontribusi</b><p class="mut">Tercatat sebagai kontribusi</p></div></div>
+  <div class="grid2" style="margin-top:8px"><div><b>22 menit</b><p class="mut">Estimasi waktu</p></div><div><b>0,12 kg CO₂e</b><p class="mut">Hemat 85% vs mobil</p></div><div><b>Rp 5.000</b><p class="mut">Tarif</p></div><div><b>+25 Poin Kontribusi</b><p class="mut">Bonus demo, sekali per akun</p></div></div>
   <button class="btn" id="pilihRute">Pilih rute ini</button></div>
  <h2>Opsi rute alternatif</h2>
  <div class="card"><div class="row"><div><b>🚲 Sepeda (jalur hijau tepi danau)</b><p class="mut">18 menit • Gratis</p></div><span class="sp"></span><span class="pill">0 kg CO₂ • +40 poin</span></div></div>
@@ -337,6 +337,53 @@ const authConfigured=Boolean(
  window.supabase
 );
 const auth=authConfigured?window.supabase.createClient(supabaseUrl,supabaseAnonKey):null;
+let activeUserId=null;
+let pointsBalance=0;
+
+function renderPoints(){
+ $$('.points-value').forEach(e=>e.textContent=pointsBalance.toLocaleString('id-ID'));
+}
+
+async function loadPoints(user){
+ if(!auth||!user)return {ok:false,message:'Saldo poin tidak tersedia.'};
+ activeUserId=user.id;
+ pointsBalance=0;
+ renderPoints();
+ const {data,error}=await auth.from('point_balances').select('points').eq('user_id',user.id).maybeSingle();
+ if(error){
+  return {ok:false,message:`Saldo poin gagal dimuat: ${error.message}`};
+ }
+ if(!data){
+  return {ok:false,message:'Saldo akun belum dibuat. Jalankan supabase-points.sql di Supabase.'};
+ }
+ if(activeUserId!==user.id)return {ok:false,message:'Akun berubah sebelum saldo poin selesai dimuat.'};
+ pointsBalance=Number(data.points);
+ renderPoints();
+ return {ok:true};
+}
+
+async function awardPoints(actionKey){
+ if(!auth||!activeUserId){
+  toast('Masuk ke akun untuk mendapatkan poin');
+  return null;
+ }
+ const {data,error}=await auth.rpc('award_points',{p_action_key:actionKey});
+ if(error){
+  toast(`Poin gagal dicatat: ${error.message}`);
+  return null;
+ }
+ const result=Array.isArray(data)?data[0]:data;
+ if(!result){
+  toast('Supabase tidak mengembalikan hasil poin.');
+  return null;
+ }
+ pointsBalance=Number(result.balance);
+ renderPoints();
+ toast(result.already_awarded
+  ?'Bonus untuk aksi ini sudah pernah didapat.'
+  :`Berhasil! +${result.points_awarded} Poin Kontribusi`);
+ return result;
+}
 
 function setAuthStatus(message,isError=false){
  const status=$('#authStatus');
@@ -353,26 +400,32 @@ if(!authConfigured){
 }
 
 async function applyAuthenticatedUser(user){
- if(!user)return;
+ if(!user)return {ok:false,message:'Akun tidak ditemukan.'};
+ const pointResult=await loadPoints(user);
  const name=user.user_metadata?.full_name?.trim();
  if(name){
   prof.name=name;
   try{localStorage.setItem(PK,JSON.stringify(prof))}catch(e){}
   renderProf();
  }
+ return pointResult;
 }
 
 if(auth){
- auth.auth.getSession().then(({data:{session}})=>{
+ auth.auth.getSession().then(async({data:{session}})=>{
   if(session){
-   applyAuthenticatedUser(session.user);
+   const result=await applyAuthenticatedUser(session.user);
+   if(!result.ok)toast(result.message);
    go('home');
   }
  });
  auth.auth.onAuthStateChange((_event,session)=>{
   if(session){
-   applyAuthenticatedUser(session.user);
+   applyAuthenticatedUser(session.user).then(result=>{if(!result.ok)toast(result.message)});
   }else{
+   activeUserId=null;
+   pointsBalance=0;
+   renderPoints();
    prof.name='Pengguna';
    renderProf();
   }
@@ -393,8 +446,8 @@ $('#loginForm').addEventListener('submit',async e=>{
   setAuthStatus(error.message,true);
   return;
  }
- await applyAuthenticatedUser(data.user);
- toast('Berhasil masuk');
+ const pointResult=await applyAuthenticatedUser(data.user);
+ toast(pointResult.ok?'Berhasil masuk':`Berhasil masuk, tetapi ${pointResult.message}`);
  $('#loginForm').reset();
  go('home');
 });
@@ -418,8 +471,8 @@ $('#signupForm').addEventListener('submit',async e=>{
   return;
  }
  if(data.session){
-  await applyAuthenticatedUser(data.user);
-  toast('Pendaftaran berhasil. Akun sudah aktif.');
+  const pointResult=await applyAuthenticatedUser(data.user);
+  toast(pointResult.ok?'Pendaftaran berhasil. Akun sudah aktif.':`Pendaftaran berhasil, tetapi ${pointResult.message}`);
   $('#signupForm').reset();
   go('home');
  }else{
@@ -430,15 +483,25 @@ $('#signupForm').addEventListener('submit',async e=>{
 
 /* Laporan terdekat */
 const reps=[
- {t:'Penumpukan limbah plastik trotoar',d:'Jl. Raya Pangururan, Pangururan • 450 m',e:'🗑️',tag:['Urgensi tinggi','r'],st:'Dalam penanganan (Dinas LH Samosir)',k:'proc',v:24},
- {t:'Lampu jalan mati total di tikungan',d:'Jl. Lintas Tomok, Pangururan • 800 m',e:'💡',tag:['Sedang','a'],st:'Menunggu verifikasi',k:'need',v:8},
- {t:'Sedimen lumpur menutup gorong-gorong',d:'Jl. Gereja, Simanindo • 1,2 km',e:'🌊',tag:['Potensi genangan','b'],st:'Dijadwalkan petugas SDA',k:'proc',v:8}
+ {t:'Penumpukan limbah plastik trotoar',d:'Jl. Raya Pangururan, Pangururan • 450 m',e:'🗑️',tag:['Urgensi tinggi','r'],st:'Dalam penanganan (Dinas LH Samosir)',k:'proc',v:24,a:'support:plastic-waste'},
+ {t:'Lampu jalan mati total di tikungan',d:'Jl. Lintas Tomok, Pangururan • 800 m',e:'💡',tag:['Sedang','a'],st:'Menunggu verifikasi',k:'need',v:8,a:'support:streetlight'},
+ {t:'Sedimen lumpur menutup gorong-gorong',d:'Jl. Gereja, Simanindo • 1,2 km',e:'🌊',tag:['Potensi genangan','b'],st:'Dijadwalkan petugas SDA',k:'proc',v:8,a:'support:drainage'}
 ];
 function drawReps(f){
- $('#reports').innerHTML=reps.filter(r=>f==='all'||r.k===f).map((r,i)=>`<div class="card rep"><div class="thumb">${r.e}</div><div style="flex:1"><span class="pill ${r.tag[1]}">${r.tag[0]}</span><h3>${r.t}</h3><p class="mut">${r.d}</p><p class="mut">${r.st}</p><div class="row" style="margin-top:6px"><span class="mut"><b class="vc">${r.v}</b> warga mendukung</span><span class="sp"></span><button class="btn s sup">Dukung (+5 poin)</button></div></div></div>`).join('')||'<p class="mut">Belum ada laporan di kategori ini.</p>';
+ $('#reports').innerHTML=reps.filter(r=>f==='all'||r.k===f).map(r=>`<div class="card rep"><div class="thumb">${r.e}</div><div style="flex:1"><span class="pill ${r.tag[1]}">${r.tag[0]}</span><h3>${r.t}</h3><p class="mut">${r.d}</p><p class="mut">${r.st}</p><div class="row" style="margin-top:6px"><span class="mut"><b class="vc">${r.v}</b> warga mendukung</span><span class="sp"></span><button class="btn s sup" data-action-key="${r.a}">Dukung (+5 poin)</button></div></div></div>`).join('')||'<p class="mut">Belum ada laporan di kategori ini.</p>';
 }
 drawReps('all');
-$('#reports').addEventListener('click',e=>{const b=e.target.closest('.sup');if(!b||b.disabled)return;b.disabled=true;b.textContent='Terdukung ✓';const c=b.closest('.card').querySelector('.vc');c.textContent=+c.textContent+1;toast('+5 Poin Kontribusi, terima kasih sudah mendukung!')});
+$('#reports').addEventListener('click',async e=>{
+ const b=e.target.closest('.sup');if(!b||b.disabled)return;
+ b.disabled=true;
+ const result=await awardPoints(b.dataset.actionKey);
+ if(!result){b.disabled=false;return}
+ b.textContent='Terdukung ✓';
+ if(!result.already_awarded){
+  const c=b.closest('.card').querySelector('.vc');
+  c.textContent=+c.textContent+1;
+ }
+});
 $('[data-filter=reports]').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;$$('[data-filter=reports] .chip').forEach(x=>x.classList.toggle('on',x===c));drawReps(c.dataset.f)});
 
 /* Chip & tab visual toggles (semua layar) */
@@ -446,14 +509,14 @@ $$('.chips:not([data-filter]), .tabs').forEach(g=>g.addEventListener('click',e=>
 
 /* Peta */
 const pins=[
- ['🔴 Sampah liar #KH-2894','Tumpukan sampah di Jl. Raya Pangururan. Volume ±2,4 m³, urgensi tinggi.','Lihat progres','lapor'],
- ['🟠 PJU padam','Lampu jalan mati di tikungan Jl. Lintas Tomok. Menunggu verifikasi.','Dukung laporan',null],
- ['🟢 Selesai dibersihkan','Area Pantai Pasir Putih Parbaba sudah bersih. Foto bukti sudah diverifikasi warga.','Tutup',null],
- ['🔴 Drainase tersumbat','Sedimen lumpur menutup gorong-gorong di Simanindo. Potensi genangan.','Dukung laporan',null],
- ['🟠 Sampah dekat dermaga','Tumpukan sampah dekat dermaga Tuktuk. Dijadwalkan petugas.','Dukung laporan',null]
+ ['🔴 Sampah liar #KH-2894','Tumpukan sampah di Jl. Raya Pangururan. Volume ±2,4 m³, urgensi tinggi.','Lihat progres','lapor',null],
+ ['🟠 PJU padam','Lampu jalan mati di tikungan Jl. Lintas Tomok. Menunggu verifikasi.','Dukung laporan',null,'support:streetlight'],
+ ['🟢 Selesai dibersihkan','Area Pantai Pasir Putih Parbaba sudah bersih. Foto bukti sudah diverifikasi warga.','Tutup',null,null],
+ ['🔴 Drainase tersumbat','Sedimen lumpur menutup gorong-gorong di Simanindo. Potensi genangan.','Dukung laporan',null,'support:drainage'],
+ ['🟠 Sampah dekat dermaga','Tumpukan sampah dekat dermaga Tuktuk. Dijadwalkan petugas.','Dukung laporan',null,'support:harbor-trash']
 ];
 function pin(i){const p=pins[i];$('#pinCard').innerHTML=`<h3>${p[0]}</h3><p class="mut" style="margin:4px 0 8px">${p[1]}</p><button class="btn s" id="pa">${p[2]}</button>`;
- $('#pa').onclick=()=>p[3]?go(p[3]):toast(i!==2?'+5 Poin Kontribusi, dukunganmu tercatat':'Ditutup')}
+ $('#pa').onclick=()=>p[3]?go(p[3]):p[4]?awardPoints(p[4]):toast(i!==2?'Titik laporan ini tidak memberi poin.':'Laporan sudah ditutup.')}
 pin(0);
 
 /* Lapor */
@@ -465,13 +528,19 @@ $('#send').onclick=()=>{
  $('#track').style.display='block';$('#track').scrollIntoView({behavior:'smooth'});toast('Laporan terkirim ke Dinas LH Samosir')};
 
 /* Komunitas */
-$$('.join').forEach(b=>b.onclick=()=>{b.textContent='Terdaftar ✓';b.disabled=true;toast('Kamu terdaftar. Sampai jumpa di lokasi!')});
+$$('.join').forEach(b=>b.onclick=async()=>{
+ if(b.dataset.actionKey){
+  const result=await awardPoints(b.dataset.actionKey);
+  if(!result)return;
+ }
+ b.textContent='Terdaftar ✓';b.disabled=true;toast('Kamu terdaftar. Sampai jumpa di lokasi!');
+});
 $('#newAct').onclick=()=>toast('Fitur buat aksi baru segera hadir');
 
 /* Sampah & Rute */
-$('#setor').onclick=()=>toast('Setoran tercatat. +10 Poin Kontribusi');
+$('#setor').onclick=async()=>{await awardPoints('waste:deposit-demo')};
 $('#scanLain').onclick=()=>toast('Arahkan kamera ke sampah berikutnya');
-$('#pilihRute').onclick=()=>toast('Rute dipilih. Catat perjalanan untuk +25 poin');
+$('#pilihRute').onclick=async()=>{await awardPoints('route:green-demo')};
 
 /* Profil: nama & foto (disimpan di perangkat pengguna) */
 const PK='tl_profile';let prof={name:'Pengguna',photo:''};
