@@ -27,6 +27,7 @@ h1{font-size:22px;line-height:1.2}h2{font-size:16px;margin:18px 0 8px}h3{font-si
 .btn{width:100%;border:0;border-radius:12px;background:var(--g7);color:#fff;font:inherit;font-weight:700;padding:13px;cursor:pointer;margin-top:8px}
 .btn.s{background:var(--g1);color:var(--accent-text);width:auto;padding:7px 12px;margin:0;font-size:12px}
 .btn.o{background:transparent;border:1.5px solid var(--g7);color:var(--accent-text)}
+a.btn{display:inline-block;text-align:center;text-decoration:none}
 .btn:focus-visible,.tab:focus-visible,.chip:focus-visible,.nav button:focus-visible{outline:3px solid var(--blu);outline-offset:2px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px}
 .chip{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 12px;border-radius:99px;font:inherit;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer}
@@ -147,9 +148,9 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
    <div class="entry-brand"><i class="lg entry-mark" aria-hidden="true"></i><span>SAMOSIR<small>LESTARI</small></span></div>
    <nav class="entry-links" aria-label="Navigasi awal">
     <button type="button" data-go="home">Beranda</button>
-    <button type="button" data-go="peta">Peta</button>
     <button type="button" data-go="lapor">Lapor</button>
-    <button type="button" data-go="sampah">Panduan</button>
+    <button type="button" data-go="cekStatus">Status</button>
+    <button type="button" data-go="admin">Login Pengelola</button>
    </nav>
   </header>
   <div class="entry-card">
@@ -184,6 +185,7 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
  </div>
  <h2>Feed laporan publik</h2>
  <div class="card"><p class="mut">Laporan yang dikirim tidak ditampilkan ke publik. Data diteruskan ke pengelola untuk diverifikasi.</p></div>
+ <button class="btn s" type="button" data-go="admin">Login Pengelola</button>
 </section>
 
 <!-- PETA -->
@@ -231,6 +233,66 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
  <p class="mut" style="margin-top:8px">Simpan nomor referensi yang muncul setelah laporan terkirim untuk keperluan tindak lanjut.</p>
 </section>
 
+<!-- CEK STATUS PUBLIK -->
+<section class="screen" id="cekStatus">
+ <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Cek Status Laporan</h3></div>
+ <p class="mut">Masukkan nomor referensi pada bukti pengiriman laporan.</p>
+ <form id="statusLookupForm" class="card">
+  <label for="trackingReference">Nomor referensi</label>
+  <input id="trackingReference" type="text" maxlength="15" autocomplete="off" placeholder="SL-XXXXXXXXXXXX" required>
+  <button class="btn" id="lookupReportButton" type="submit">Cek status</button>
+ </form>
+ <div id="statusLookupMessage" class="card" role="status" aria-live="polite" hidden></div>
+ <article id="statusLookupResult" class="card" hidden></article>
+</section>
+
+<!-- DASHBOARD PENGELOLA -->
+<section class="screen" id="admin">
+ <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Dashboard Pengelola</h3></div>
+ <p id="adminMessage" class="card" role="status" aria-live="polite">Masuk dengan akun pengelola.</p>
+ <form id="adminLoginForm" class="card">
+  <label for="adminEmail">Email pengelola</label>
+  <input id="adminEmail" type="email" autocomplete="username" required>
+  <label for="adminPassword">Kata sandi</label>
+  <input id="adminPassword" type="password" autocomplete="current-password" required>
+  <button class="btn" id="adminLoginButton" type="submit">Masuk sebagai pengelola</button>
+ </form>
+ <div id="adminDashboard" hidden>
+  <div class="row" style="margin-bottom:10px">
+   <h2 style="margin:0">Laporan masuk</h2>
+   <span class="sp"></span>
+   <button id="adminLogoutButton" class="btn s" type="button">Keluar</button>
+  </div>
+  <div class="card">
+   <label for="adminCategoryFilter">Filter kategori</label>
+   <select id="adminCategoryFilter">
+    <option value="">Semua kategori</option>
+    <option value="waste">Sampah</option>
+    <option value="streetlight">Lampu jalan</option>
+    <option value="drainage">Drainase</option>
+    <option value="green_space">Ruang hijau</option>
+    <option value="other">Lainnya</option>
+   </select>
+   <label for="adminStatusFilter">Filter status</label>
+   <select id="adminStatusFilter">
+    <option value="">Semua status</option>
+    <option value="pending_verification">Menunggu verifikasi</option>
+    <option value="reviewing">Sedang ditangani</option>
+    <option value="handled">Selesai</option>
+    <option value="rejected">Ditolak</option>
+   </select>
+   <label for="adminUrgencyFilter">Filter urgensi</label>
+   <select id="adminUrgencyFilter">
+    <option value="">Semua tingkat urgensi</option>
+    <option value="high">Tinggi</option>
+    <option value="medium">Sedang</option>
+    <option value="low">Rendah</option>
+   </select>
+  </div>
+  <div id="adminReports" aria-live="polite"></div>
+ </div>
+</section>
+
 <!-- KOMUNITAS -->
 <section class="screen" id="komunitas">
  <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">Komunitas &amp; Aksi Warga<small>Kabupaten Samosir</small></div></div>
@@ -264,6 +326,7 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
  <button data-go="home" class="on"><span>🏠</span>Beranda</button>
  <button data-go="peta"><span>🗺️</span>Peta</button>
  <button data-go="lapor" class="fab"><span>📷</span>Lapor</button>
+ <button data-go="cekStatus"><span>🔎</span>Status</button>
  <button data-go="komunitas"><span>👥</span>Komunitas</button>
 </nav>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -278,11 +341,12 @@ function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clea
 function go(id){
  $$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
  $('#app').classList.toggle('welcome',id==='onb');
- const main=['home','peta','lapor','komunitas'];
+ const main=['home','peta','lapor','cekStatus','komunitas'];
  $('#nav').style.display=main.includes(id)?'flex':'none';
  $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
  $('#main').scrollTop=0;
  if(id==='peta')initMap();
+ if(id==='admin')openAdminDashboard();
 }
 document.addEventListener('click',e=>{
  const t=e.target.closest('[data-go]');if(t)go(t.dataset.go);
@@ -302,8 +366,12 @@ const supabaseConfigured=Boolean(
 const supabaseClient=supabaseConfigured?window.supabase.createClient(supabaseUrl,supabaseAnonKey,{
  auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}
 }):null;
+const adminClient=supabaseConfigured?window.supabase.createClient(supabaseUrl,supabaseAnonKey,{
+ auth:{storageKey:'samosir-report-admin-auth',persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}
+}):null;
 let LM=null,me=null;
 const REPORT_BUCKET='report-photos';
+const RESOLUTION_BUCKET='report-resolution-photos';
 let reportCoordinates={latitude:null,longitude:null};
 let reportPhotoUrl=null;
 
@@ -336,12 +404,21 @@ async function prepareReportPhoto(file){
  return new File([blob],`report-${Date.now()}.jpg`,{type:'image/jpeg'});
 }
 
-function showSavedReport(reportId){
+function showSavedReport(reportReference){
  const track=$('#track');
  track.replaceChildren();
  appendReportText(track,'span','Terkirim • Menunggu verifikasi','pill');
  appendReportText(track,'h3','Laporan berhasil dikirim');
- appendReportText(track,'p',`Nomor laporan: ${reportId} • simpan nomor ini untuk referensi`,'mut');
+ appendReportText(track,'p',`Nomor referensi: ${reportReference} • simpan nomor ini untuk cek status`,'mut');
+ const statusButton=document.createElement('button');
+ statusButton.type='button';
+ statusButton.className='btn s';
+ statusButton.textContent='Cek status laporan';
+ statusButton.addEventListener('click',()=>{
+  $('#trackingReference').value=reportReference;
+  go('cekStatus');
+ });
+ track.appendChild(statusButton);
  track.style.display='block';
  track.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
@@ -356,6 +433,393 @@ function createReportUuid(){
  const hex=Array.from(bytes,byte=>byte.toString(16).padStart(2,'0')).join('');
  return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
 }
+
+function createReportReference(){
+ if(!window.crypto?.getRandomValues)throw new Error('Browser tidak mendukung pembuatan nomor referensi yang aman.');
+ const bytes=new Uint8Array(6);
+ window.crypto.getRandomValues(bytes);
+ return `SL-${Array.from(bytes,byte=>byte.toString(16).padStart(2,'0')).join('').toUpperCase()}`;
+}
+
+const reportStatusLabels={
+ pending_verification:'Menunggu Verifikasi',
+ reviewing:'Sedang Ditangani',
+ handled:'Selesai',
+ rejected:'Ditolak'
+};
+const reportCategoryLabels={
+ waste:'Sampah',
+ streetlight:'Lampu jalan',
+ drainage:'Drainase',
+ green_space:'Ruang hijau',
+ other:'Lainnya'
+};
+const urgencyLabels={low:'Rendah',medium:'Sedang',high:'Tinggi'};
+let adminAuthorized=false;
+let adminRequestId=0;
+
+function showStatusLookupMessage(message){
+ const box=$('#statusLookupMessage');
+ box.textContent=message;
+ box.hidden=false;
+}
+
+$('#statusLookupForm').addEventListener('submit',async event=>{
+ event.preventDefault();
+ if(!supabaseClient){showStatusLookupMessage('Layanan cek status belum tersedia. Coba lagi nanti.');return}
+ const reference=$('#trackingReference').value.trim().toUpperCase();
+ if(!/^SL-[A-Z0-9]{12}$/.test(reference)){
+  showStatusLookupMessage('Format nomor referensi tidak sesuai. Contoh: SL-12AB34CD56EF.');
+  return;
+ }
+ const button=$('#lookupReportButton');
+ button.disabled=true;
+ button.textContent='Memeriksa...';
+ $('#statusLookupResult').hidden=true;
+ $('#statusLookupMessage').hidden=true;
+ try{
+  const {data,error}=await supabaseClient.rpc('lookup_report_by_reference',{p_reference:reference});
+  if(error)throw new Error(error.message);
+  const report=Array.isArray(data)?data[0]:null;
+  if(!report){
+   showStatusLookupMessage('Laporan tidak ditemukan. Periksa kembali nomor referensi Anda.');
+   return;
+  }
+  const result=$('#statusLookupResult');
+  result.replaceChildren();
+  appendReportText(result,'h2',`Laporan ${report.report_ref}`);
+  appendReportText(result,'p',reportStatusLabels[report.status]||report.status,'pill');
+  appendReportText(result,'p',`Kategori: ${reportCategoryLabels[report.category]||report.category}`);
+  appendReportText(result,'p',`Lokasi: ${report.location_label}`);
+  const createdDate=new Date(report.created_at);
+  appendReportText(result,'p',`Tanggal lapor: ${Number.isNaN(createdDate.getTime())?'Tidak tersedia':createdDate.toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})}`);
+  appendReportText(result,'h3','Catatan pengelola');
+  appendReportText(result,'p',report.admin_note||'Belum ada catatan tindak lanjut.','mut');
+  if(report.resolved_photo_url){
+   appendReportText(result,'h3','Foto bukti penyelesaian');
+   try{
+    const photoUrl=new URL(report.resolved_photo_url);
+    if(photoUrl.protocol==='https:'){
+     const image=document.createElement('img');
+     image.className='photo-preview';
+     image.loading='lazy';
+     image.alt='Foto bukti penyelesaian laporan';
+     image.src=photoUrl.href;
+     result.appendChild(image);
+    }else{
+     appendReportText(result,'p','Foto bukti tidak dapat ditampilkan karena alamatnya tidak aman.','mut');
+    }
+   }catch(error){
+    appendReportText(result,'p','Alamat foto bukti tidak valid.','mut');
+   }
+  }
+  result.hidden=false;
+ }catch(error){
+  showStatusLookupMessage(`Gagal memeriksa status: ${error.message||'Terjadi kesalahan yang tidak diketahui.'}`);
+ }finally{
+  button.disabled=false;
+  button.textContent='Cek status';
+ }
+});
+
+function setAdminMessage(message){
+ $('#adminMessage').textContent=message;
+}
+
+async function enableAdminDashboard(userId){
+ if(!adminClient)return false;
+ const {data,error}=await adminClient.from('report_admins')
+  .select('user_id')
+  .eq('user_id',userId)
+  .maybeSingle();
+ if(error){
+  const {error:signOutError}=await adminClient.auth.signOut();
+  adminAuthorized=false;
+  setAdminMessage(`Tidak dapat memverifikasi akses pengelola: ${error.message}${signOutError?`. Gagal menutup sesi: ${signOutError.message}`:''}`);
+  $('#adminLoginForm').hidden=false;
+  $('#adminDashboard').hidden=true;
+  return false;
+ }
+ if(!data){
+  const {error:signOutError}=await adminClient.auth.signOut();
+  adminAuthorized=false;
+  setAdminMessage(signOutError
+   ?`Akun ini tidak memiliki akses pengelola. Sesi gagal ditutup: ${signOutError.message}`
+   :'Akun ini tidak memiliki akses pengelola');
+  $('#adminLoginForm').hidden=false;
+  $('#adminDashboard').hidden=true;
+  return false;
+ }
+ adminAuthorized=true;
+ $('#adminLoginForm').hidden=true;
+ $('#adminDashboard').hidden=false;
+ setAdminMessage('Anda masuk sebagai pengelola.');
+ await loadAdminReports();
+ return true;
+}
+
+async function openAdminDashboard(){
+ const requestId=++adminRequestId;
+ adminAuthorized=false;
+ $('#adminLoginForm').hidden=false;
+ $('#adminDashboard').hidden=true;
+ if(!adminClient){
+  setAdminMessage('Supabase belum dikonfigurasi. Dashboard pengelola tidak tersedia.');
+  return;
+ }
+ setAdminMessage('Memeriksa sesi pengelola...');
+ try{
+  const {data,error}=await adminClient.auth.getSession();
+  if(requestId!==adminRequestId)return;
+  if(error){
+   setAdminMessage(`Gagal memeriksa sesi: ${error.message}`);
+   return;
+  }
+  if(!data.session){
+   setAdminMessage('Masuk dengan akun pengelola.');
+   return;
+  }
+  await enableAdminDashboard(data.session.user.id);
+ }catch(error){
+  if(requestId===adminRequestId)setAdminMessage(`Gagal memeriksa sesi: ${error.message||'Terjadi kesalahan yang tidak diketahui.'}`);
+ }
+}
+
+function addAdminSelectOption(select,label,value){
+ const option=document.createElement('option');
+ option.value=value;
+ option.textContent=label;
+ select.appendChild(option);
+}
+
+function createWhatsAppLink(phone){
+ const digits=String(phone).replace(/\D/g,'');
+ if(digits.length<8||digits.length>15)return null;
+ const internationalNumber=digits.startsWith('0')?`62${digits.slice(1)}`:digits;
+ const link=document.createElement('a');
+ link.className='btn s admin-whatsapp';
+ link.href=`https://wa.me/${internationalNumber}`;
+ link.target='_blank';
+ link.rel='noopener noreferrer';
+ link.textContent='Hubungi via WhatsApp';
+ return link;
+}
+
+function renderAdminReport(report,photoResult){
+ const card=document.createElement('article');
+ card.className='card admin-report';
+ const header=document.createElement('div');
+ header.className='row';
+ appendReportText(header,'h3',`Laporan ${report.report_ref}`);
+ const spacer=document.createElement('span');
+ spacer.className='sp';
+ header.append(spacer);
+ appendReportText(header,'span',reportStatusLabels[report.status]||report.status,'pill');
+ card.appendChild(header);
+ appendReportText(card,'p',`Kategori: ${reportCategoryLabels[report.category]||report.category}`);
+ appendReportText(card,'p',`Urgensi: ${urgencyLabels[report.urgency]||report.urgency}`);
+ appendReportText(card,'p',`Lokasi: ${report.location_label}`);
+ const latitude=Number(report.latitude),longitude=Number(report.longitude);
+ if(report.latitude!==null&&report.longitude!==null&&Number.isFinite(latitude)&&Number.isFinite(longitude)){
+  const mapLink=document.createElement('a');
+  mapLink.href=`https://www.google.com/maps?q=${latitude},${longitude}`;
+  mapLink.target='_blank';
+  mapLink.rel='noopener noreferrer';
+  mapLink.textContent='Buka lokasi di Google Maps';
+  card.appendChild(mapLink);
+ }
+ appendReportText(card,'p',`Dikirim: ${new Date(report.created_at).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})}`);
+ appendReportText(card,'p',report.description||'Tidak ada keterangan.','mut');
+ if(report.contact_whatsapp){
+  appendReportText(card,'p',`WhatsApp pelapor: ${report.contact_whatsapp}`);
+  const whatsAppLink=createWhatsAppLink(report.contact_whatsapp);
+  if(whatsAppLink)card.appendChild(whatsAppLink);
+ }
+ if(photoResult.error){
+  appendReportText(card,'p',`Foto laporan gagal dimuat: ${photoResult.error.message}`,'mut');
+ }else if(photoResult.data?.signedUrl){
+  const image=document.createElement('img');
+  image.className='photo-preview';
+  image.loading='lazy';
+  image.alt='Foto bukti laporan warga';
+  image.src=photoResult.data.signedUrl;
+  card.appendChild(image);
+ }
+ const form=document.createElement('form');
+ form.className='admin-report-form';
+ const statusLabel=document.createElement('label');
+ statusLabel.textContent='Status laporan';
+ const statusSelect=document.createElement('select');
+ statusSelect.name='status';
+ addAdminSelectOption(statusSelect,'Menunggu verifikasi','pending_verification');
+ addAdminSelectOption(statusSelect,'Sedang ditangani','reviewing');
+ addAdminSelectOption(statusSelect,'Selesai','handled');
+ addAdminSelectOption(statusSelect,'Ditolak','rejected');
+ statusSelect.value=report.status;
+ statusLabel.appendChild(statusSelect);
+ form.appendChild(statusLabel);
+ const noteLabel=document.createElement('label');
+ noteLabel.textContent='Catatan tindak lanjut';
+ const note=document.createElement('textarea');
+ note.name='admin_note';
+ note.rows=3;
+ note.maxLength=2000;
+ note.value=report.admin_note||'';
+ noteLabel.appendChild(note);
+ form.appendChild(noteLabel);
+ const photoLabel=document.createElement('label');
+ photoLabel.textContent='Foto bukti penanganan (opsional)';
+ const photoInput=document.createElement('input');
+ photoInput.name='resolved_photo';
+ photoInput.type='file';
+ photoInput.accept='image/jpeg,image/png,image/webp';
+ photoLabel.appendChild(photoInput);
+ form.appendChild(photoLabel);
+ const saveButton=document.createElement('button');
+ saveButton.className='btn';
+ saveButton.type='submit';
+ saveButton.textContent='Simpan tindak lanjut';
+ form.appendChild(saveButton);
+ form.addEventListener('submit',event=>{
+  event.preventDefault();
+  saveAdminReport(report,form,saveButton);
+ });
+ card.appendChild(form);
+ return card;
+}
+
+async function loadAdminReports(){
+ if(!adminAuthorized||!adminClient)return;
+ const requestId=++adminRequestId;
+ const container=$('#adminReports');
+ container.replaceChildren();
+ appendReportText(container,'p','Memuat laporan...','mut');
+ const status=$('#adminStatusFilter').value;
+ const category=$('#adminCategoryFilter').value;
+ const urgency=$('#adminUrgencyFilter').value;
+ const reports=[];
+ const pageSize=500;
+ try{
+  for(let offset=0;;offset+=pageSize){
+   let query=adminClient.from('reports')
+    .select('id,report_ref,category,urgency,description,location_label,latitude,longitude,contact_whatsapp,photo_path,status,admin_note,resolved_photo_url,created_at')
+    .order('created_at',{ascending:false});
+   if(status)query=query.eq('status',status);
+   if(category)query=query.eq('category',category);
+   if(urgency)query=query.eq('urgency',urgency);
+   const {data,error}=await query.range(offset,offset+pageSize-1);
+   if(requestId!==adminRequestId)return;
+   if(error)throw new Error(error.message);
+   reports.push(...(data||[]));
+   if(!data||data.length<pageSize)break;
+  }
+  container.replaceChildren();
+  if(!reports.length){
+   appendReportText(container,'p','Belum ada laporan yang sesuai filter.','mut');
+   return;
+  }
+  for(let offset=0;offset<reports.length;offset+=25){
+   const batch=reports.slice(offset,offset+25);
+   const photoResults=await Promise.all(batch.map(report=>
+    adminClient.storage.from(REPORT_BUCKET).createSignedUrl(report.photo_path,3600)
+   ));
+   if(requestId!==adminRequestId)return;
+   batch.forEach((report,index)=>{
+    const card=renderAdminReport(report,photoResults[index]);
+    container.appendChild(card);
+   });
+  }
+ }catch(error){
+  if(requestId!==adminRequestId)return;
+  container.replaceChildren();
+  appendReportText(container,'p',`Gagal memuat laporan: ${error.message||'Terjadi kesalahan yang tidak diketahui.'}`,'mut');
+ }
+}
+
+async function saveAdminReport(report,form,button){
+ if(!adminAuthorized||!adminClient)return;
+ button.disabled=true;
+ button.textContent='Menyimpan...';
+ let uploadedPath=null;
+ try{
+  const photoFile=form.elements.namedItem('resolved_photo').files[0];
+  const update={
+   status:form.elements.namedItem('status').value,
+   admin_note:form.elements.namedItem('admin_note').value.trim()||null
+  };
+  if(photoFile){
+   if(!['image/jpeg','image/png','image/webp'].includes(photoFile.type)){
+    throw new Error('Foto harus berformat JPG, PNG, atau WebP.');
+   }
+   if(photoFile.size>5*1024*1024)throw new Error('Ukuran foto bukti maksimal 5 MB.');
+   const preparedPhoto=await prepareReportPhoto(photoFile);
+   if(preparedPhoto.size>5*1024*1024)throw new Error('Foto setelah diproses masih melebihi 5 MB.');
+   uploadedPath=`${report.id}/${createReportUuid()}.jpg`;
+   const {error:uploadError}=await adminClient.storage.from(RESOLUTION_BUCKET).upload(uploadedPath,preparedPhoto,{
+    contentType:'image/jpeg',
+    cacheControl:'3600',
+    upsert:false
+   });
+   if(uploadError)throw new Error(`Unggah foto bukti gagal: ${uploadError.message}`);
+   update.resolved_photo_url=adminClient.storage.from(RESOLUTION_BUCKET).getPublicUrl(uploadedPath).data.publicUrl;
+  }
+  const {error}=await adminClient.from('reports').update(update).eq('id',report.id);
+  if(error){
+   if(uploadedPath){
+    const {error:cleanupError}=await adminClient.storage.from(RESOLUTION_BUCKET).remove([uploadedPath]);
+    if(cleanupError)throw new Error(`Pembaruan laporan gagal: ${error.message}. Foto yang baru diunggah juga gagal dibersihkan: ${cleanupError.message}`);
+   }
+   throw new Error(`Pembaruan laporan gagal: ${error.message}`);
+  }
+  setAdminMessage('Perubahan laporan berhasil disimpan.');
+  await loadAdminReports();
+ }catch(error){
+  setAdminMessage(`Gagal menyimpan tindak lanjut: ${error.message||'Terjadi kesalahan yang tidak diketahui.'}`);
+ }finally{
+  button.disabled=false;
+  button.textContent='Simpan tindak lanjut';
+ }
+}
+
+$('#adminLoginForm').addEventListener('submit',async event=>{
+ event.preventDefault();
+ if(!adminClient){setAdminMessage('Supabase belum dikonfigurasi.');return}
+ const button=$('#adminLoginButton');
+ button.disabled=true;
+ button.textContent='Memeriksa...';
+ try{
+  const {data,error}=await adminClient.auth.signInWithPassword({
+   email:$('#adminEmail').value.trim(),
+   password:$('#adminPassword').value
+  });
+  if(error)throw new Error(error.message);
+  if(!data.user)throw new Error('Supabase tidak mengembalikan identitas pengguna.');
+  await enableAdminDashboard(data.user.id);
+ }catch(error){
+  setAdminMessage(`Gagal masuk: ${error.message||'Terjadi kesalahan yang tidak diketahui.'}`);
+ }finally{
+  button.disabled=false;
+  button.textContent='Masuk sebagai pengelola';
+ }
+});
+
+$('#adminLogoutButton').addEventListener('click',async()=>{
+ if(!adminClient)return;
+ try{
+  const {error}=await adminClient.auth.signOut();
+  if(error)throw new Error(error.message);
+  adminAuthorized=false;
+  adminRequestId++;
+  $('#adminDashboard').hidden=true;
+  $('#adminLoginForm').hidden=false;
+  setAdminMessage('Anda telah keluar dari dashboard pengelola.');
+ }catch(error){
+  setAdminMessage(`Gagal keluar: ${error.message||'Terjadi kesalahan yang tidak diketahui.'}`);
+ }
+});
+$('#adminStatusFilter').addEventListener('change',loadAdminReports);
+$('#adminUrgencyFilter').addEventListener('change',loadAdminReports);
+$('#adminCategoryFilter').addEventListener('change',loadAdminReports);
 
 /* Chip & tab visual toggles (semua layar) */
 $$('.chips:not([data-filter]), .tabs').forEach(g=>g.addEventListener('click',e=>{const c=e.target.closest('.chip,.tab');if(!c)return;g.querySelectorAll('.chip,.tab').forEach(x=>x.classList.toggle('on',x===c))}));
@@ -429,6 +893,7 @@ $('#reportForm').addEventListener('submit',async e=>{
   if(preparedPhoto.size>5*1024*1024)throw new Error('Foto setelah diproses masih melebihi 5 MB.');
   const objectId=createReportUuid();
   const reportId=createReportUuid();
+  const reportReference=createReportReference();
   photoPath=`guest/${objectId}.jpg`;
   const {error:uploadError}=await supabaseClient.storage.from(REPORT_BUCKET).upload(photoPath,preparedPhoto,{
    contentType:'image/jpeg',
@@ -441,6 +906,7 @@ $('#reportForm').addEventListener('submit',async e=>{
   const reportPayload={
    id:reportId,
    user_id:null,
+   report_ref:reportReference,
    category:$('#reportCategory').value,
    urgency:$('#urg button.on').dataset.value,
    description:$('#desc').value.trim(),
@@ -464,7 +930,7 @@ $('#reportForm').addEventListener('submit',async e=>{
 
   photoUploaded=false;
   photoPath=null;
-  showSavedReport(reportId);
+  showSavedReport(reportReference);
   $('#reportForm').reset();
   if(reportPhotoUrl)URL.revokeObjectURL(reportPhotoUrl);
   reportPhotoUrl=null;

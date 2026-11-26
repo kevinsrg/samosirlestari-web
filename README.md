@@ -10,8 +10,30 @@ Website informasi dan pelaporan masalah lingkungan di Kabupaten Samosir.
    Jangan gunakan `service_role key` di browser.
 4. Jalankan [supabase-reports.sql](supabase-reports.sql) melalui
    `Supabase Dashboard -> SQL Editor -> New query -> Run`. Jika tabel laporan
-   sudah pernah dibuat, jalankan ulang skrip untuk menerapkan perubahan skema
-   laporan tamu.
+   sudah pernah dibuat, jalankan ulang skrip untuk menerapkan skema pelacakan
+   status, dashboard pengelola, dan kebijakan akses.
+
+### Menyiapkan akun pengelola
+
+1. Buat akun pengelola melalui `Supabase Dashboard -> Authentication -> Users`.
+   Jangan menambahkan formulir pendaftaran admin di aplikasi publik.
+2. Salin UUID akun dari daftar pengguna.
+3. Jalankan perintah berikut di SQL Editor dengan mengganti UUID contoh:
+
+   ```sql
+   insert into public.report_admins (user_id)
+   values ('00000000-0000-0000-0000-000000000000')
+   on conflict (user_id) do nothing;
+   ```
+
+4. Buka **Portal pengelola** di aplikasi dan masuk menggunakan email serta kata
+   sandi akun tersebut. Hapus akses dengan menghapus UUID dari
+   `public.report_admins`.
+
+Foto laporan warga tetap privat dan hanya dapat dilihat pengelola. Foto bukti
+penyelesaian disimpan di bucket publik `report-resolution-photos`, sehingga
+siapa pun yang memiliki nomor referensi dapat melihatnya melalui halaman cek
+status. Nomor WhatsApp pelapor tidak dikembalikan oleh pencarian publik.
 
 Untuk pengujian lokal, jalankan situs melalui server HTTP:
 
@@ -26,12 +48,16 @@ Lalu buka `http://localhost:5500`.
 Pengunjung dapat langsung memilih **Lapor sekarang** tanpa membuat akun atau
 menyimpan kata sandi. Foto bukti, kategori, dan lokasi diperlukan; keterangan,
 GPS, serta nomor WhatsApp bersifat opsional. Setelah terkirim, simpan nomor
-referensi yang ditampilkan.
+referensi acak berformat `SL-XXXXXXXXXXXX` yang ditampilkan. Gunakan menu
+**Status** untuk melihat status terkini, lokasi, tanggal laporan, catatan
+pengelola, dan foto bukti penyelesaian jika tersedia.
 
 Laporan dan foto disimpan di Supabase dalam bucket privat. Akses anonim hanya
-dapat mengirim laporan dan mengunggah foto ke folder khusus; pengunjung tidak
-dapat membaca laporan melalui aplikasi. Nomor WhatsApp hanya untuk tindak lanjut
-manual oleh pengelola dan tidak memicu pesan otomatis.
+dapat mengirim laporan dan mengunggah foto ke folder khusus, serta memeriksa
+status lewat fungsi pencarian yang hanya mengembalikan informasi terbatas untuk
+nomor referensi yang cocok. Pengunjung tidak mendapat akses baca langsung ke
+tabel laporan. Nomor WhatsApp hanya untuk tindak lanjut manual oleh pengelola
+dan tidak memicu pesan otomatis.
 
 Form membatasi foto hingga 5 MB dan mengecilkannya di browser sebelum diunggah.
 Kebijakan anon membatasi operasi dan folder, tetapi endpoint laporan tetap dapat
