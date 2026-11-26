@@ -22,7 +22,6 @@ h1{font-size:22px;line-height:1.2}h2{font-size:16px;margin:18px 0 8px}h3{font-si
 .logo{font-weight:800;color:var(--accent-text)}.logo small{display:block;font-weight:500;color:var(--mut);font-size:11px}
 .pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--g1);color:var(--accent-text);white-space:nowrap}
 .pill.r{background:#fde4e4;color:var(--red)}.pill.a{background:#fdf0cf;color:#9a6a00}.pill.b{background:#dcebfb;color:#1d5fa6}
-.points-notice{border:0;font:inherit;font-size:11px;font-weight:700;cursor:pointer}.points-notice:focus-visible{outline:3px solid var(--blu);outline-offset:2px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
 .row{display:flex;align-items:center;gap:10px}.sp{flex:1}.mut{color:var(--mut);font-size:12px}
 .btn{width:100%;border:0;border-radius:12px;background:var(--g7);color:#fff;font:inherit;font-weight:700;padding:13px;cursor:pointer;margin-top:8px}
@@ -62,10 +61,6 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
 #toast.on{opacity:1}
 .onb{min-height:100%;display:flex;flex-direction:column;justify-content:center;text-align:center;gap:14px;padding:20px 6px}
 .onb .big{font-size:64px}
-.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.auth-actions .btn{margin-top:0}
-.auth-page{min-height:100%;display:flex;flex-direction:column;justify-content:center}
-.auth-page h1{margin-top:14px}.auth-page .card{margin-top:12px}
-.av{width:88px;height:88px;border-radius:50%;border:3px solid var(--g5);background:var(--g1) center/cover no-repeat;position:relative;font-size:40px;cursor:pointer;display:block;margin:0 auto 8px;padding:0}.av em{position:absolute;right:-4px;bottom:-2px;background:var(--g7);color:#fff;font-style:normal;font-size:13px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--card)}.avs{width:34px;height:34px;border-radius:50%;border:2px solid var(--g5);background:var(--g1) center/cover no-repeat;font-size:16px;cursor:pointer;padding:0;flex:none}.av:focus-visible,.avs:focus-visible{outline:3px solid var(--blu);outline-offset:2px}.lnk{background:none;border:0;color:var(--accent-text);font:inherit;font-size:12px;font-weight:700;cursor:pointer;text-decoration:underline}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 @media (min-width:768px){
@@ -86,9 +81,7 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
  .nav button span{font-size:22px}
  .nav button.fab span{margin:-22px auto 4px}
  #lmap,.map{height:480px!important}
- .auth-page{max-width:520px;margin:0 auto}
  .onb{max-width:520px;width:100%;margin:0 auto}
- .auth-actions{max-width:520px;margin:0 auto}
  .rep{padding:14px}
  .thumb{width:80px;height:80px}
  #toast{bottom:88px}
@@ -112,9 +105,7 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
 .entry-card{width:min(100%,410px);justify-self:center;align-self:center;padding:26px 28px;border:1px solid rgba(255,255,255,.75);border-radius:22px;background:rgba(50,119,150,.52);color:#fff;backdrop-filter:blur(13px);box-shadow:0 16px 48px rgba(0,0,0,.22);display:flex;flex-direction:column;align-items:center;gap:17px}
 .entry-card .lg.big{width:142px;height:142px}
 .entry-tagline{color:#f5fbff}
-.entry-card .auth-actions{width:100%;gap:10px}
 .entry-card .btn{padding:11px 12px;margin-top:0}
-.entry-card .btn.o{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.65);color:#fff}
 .entry-card .btn.s{background:rgba(8,44,66,.55);color:#fff;border:1px solid rgba(255,255,255,.34)}
 .entry-highlights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:min(100%,900px);justify-self:center}
 .entry-highlight{min-width:0;min-height:78px;display:flex;align-items:center;gap:11px;padding:12px 14px;border:1px solid rgba(255,255,255,.3);border-radius:16px;background:rgba(8,47,69,.65);color:#fff;text-align:left;font:inherit;cursor:pointer;backdrop-filter:blur(10px)}
@@ -164,14 +155,12 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
   <div class="entry-card">
    <i class="lg big" role="img" aria-label="Logo SamosirLestari"></i>
    <p class="entry-tagline">Pengembangan Wisata Alam &amp; Budaya Pulau Samosir</p>
-   <div class="auth-actions">
-    <button class="btn" data-go="login">Masuk</button>
-    <button class="btn o" data-go="signup">Daftar akun</button>
-   </div>
-   <button class="btn s" data-go="home">Jelajahi &amp; lapor tanpa akun</button>
+   <p class="entry-tagline">Laporkan masalah lingkungan dengan cepat, tanpa akun.</p>
+   <button class="btn" data-go="lapor">Lapor sekarang</button>
+   <button class="btn s" data-go="home">Jelajahi Samosir</button>
   </div>
   <div class="entry-highlights" id="entryHighlights" aria-label="Fitur SamosirLestari">
-   <button class="entry-highlight" type="button" data-go="peta"><span class="entry-icon" aria-hidden="true">🗺️</span><span><b>Peta Danau Toba</b><small>Jelajahi peta dan lokasi laporan akun</small></span></button>
+   <button class="entry-highlight" type="button" data-go="peta"><span class="entry-icon" aria-hidden="true">🗺️</span><span><b>Peta Danau Toba</b><small>Jelajahi peta wilayah Samosir</small></span></button>
    <button class="entry-highlight" type="button" data-go="lapor"><span class="entry-icon" aria-hidden="true">📷</span><span><b>Lapor masalah</b><small>Kirim foto dan detail untuk ditinjau</small></span></button>
    <button class="entry-highlight" type="button" data-go="sampah"><span class="entry-icon" aria-hidden="true">♻️</span><span><b>Panduan warga</b><small>Pelajari langkah umum memilah sampah</small></span></button>
   </div>
@@ -179,57 +168,13 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
  </div>
 </section>
 
-<!-- AKUN -->
-<section class="screen" id="login">
- <div class="auth-page">
-  <button class="btn s" style="align-self:flex-start" data-go="onb">← Kembali</button>
-  <h1>Masuk</h1><p class="mut">Masuk ke akun SamosirLestari Anda.</p>
-  <div class="card" id="authStatus"><p class="mut">Mengecek konfigurasi autentikasi...</p></div>
-  <form id="loginForm">
-   <label for="loginEmail">Email</label><input id="loginEmail" type="email" autocomplete="email" required>
-   <label for="loginPassword">Kata sandi</label><input id="loginPassword" type="password" autocomplete="current-password" required>
-   <button class="btn" type="submit">Masuk</button>
-  </form>
-  <p class="mut" style="text-align:center;margin-top:12px"><button class="lnk" type="button" id="forgotPasswordButton">Lupa kata sandi?</button></p>
-  <p class="mut" style="text-align:center;margin-top:12px">Belum punya akun? <button class="lnk" type="button" data-go="signup">Daftar akun</button></p>
- </div>
-</section>
-
-<section class="screen" id="passwordReset">
- <div class="auth-page">
-  <button class="btn s" style="align-self:flex-start" data-go="login">← Kembali ke masuk</button>
-  <h1>Atur kata sandi baru</h1><p class="mut">Pilih kata sandi baru untuk akunmu.</p>
-  <form id="passwordResetForm">
-   <label for="newPassword">Kata sandi baru (minimal 8 karakter)</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" required>
-   <label for="confirmNewPassword">Ulangi kata sandi baru</label><input id="confirmNewPassword" type="password" autocomplete="new-password" minlength="8" required>
-   <button class="btn" type="submit">Simpan kata sandi baru</button>
-  </form>
- </div>
-</section>
-
-<section class="screen" id="signup">
- <div class="auth-page">
-  <button class="btn s" style="align-self:flex-start" data-go="onb">← Kembali</button>
-  <h1>Daftar akun</h1><p class="mut">Buat akun untuk mulai berkontribusi.</p>
-  <div class="card" id="signupStatus"><p class="mut">Mengecek konfigurasi autentikasi...</p></div>
-  <form id="signupForm">
-   <label for="signupName">Nama</label><input id="signupName" type="text" autocomplete="name" required>
-   <label for="signupEmail">Email</label><input id="signupEmail" type="email" autocomplete="email" required>
-   <label for="signupPassword">Kata sandi (minimal 8 karakter)</label><input id="signupPassword" type="password" autocomplete="new-password" minlength="8" required>
-   <label for="signupConfirm">Ulangi kata sandi</label><input id="signupConfirm" type="password" autocomplete="new-password" minlength="8" required>
-   <button class="btn" type="submit">Buat akun</button>
-  </form>
-  <p class="mut" style="text-align:center;margin-top:12px">Sudah punya akun? <button class="lnk" type="button" data-go="login">Masuk</button></p>
- </div>
-</section>
-
 <!-- BERANDA -->
 <section class="screen" id="home">
- <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">SamosirLestari<small>Kabupaten Samosir</small></div><span class="sp"></span><button class="pill points-notice" type="button" data-points-notice aria-label="Lihat notifikasi saldo poin">🪙 <span class="points-value">—</span> Poin</button><button class="avs" data-go="profil" aria-label="Buka profil"><span class="ae">🙂</span></button></div>
- <h1>Halo, <span class="uname">Pengguna</span> 👋</h1><p class="mut">Kabupaten Samosir</p>
+ <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">SamosirLestari<small>Kabupaten Samosir</small></div></div>
+ <h1>Selamat datang 👋</h1><p class="mut">Kabupaten Samosir</p>
  <div class="card" style="margin-top:12px"><h3>Laporan lingkungan warga</h3>
-  <p class="mut">Kirim laporan tanpa akun. Buat akun hanya jika ingin mengumpulkan poin dan melihat riwayat laporan akun.</p>
-  <button class="btn s" data-go="lapor">Buat laporan</button></div>
+  <p class="mut">Kirim foto dan detail masalah tanpa membuat akun atau mengingat kata sandi.</p>
+  <button class="btn s" data-go="lapor">Buat laporan sekarang</button></div>
  <h2>Aksi cepat warga</h2>
  <div class="grid2">
   <button class="quick hero" data-go="lapor"><i class="ico">📷</i><b>Lapor Masalah</b><span>Foto dan detail laporan</span></button>
@@ -237,18 +182,8 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
   <button class="quick" data-go="sampah"><i class="ico">♻️</i><b>Pilah Sampah</b><span>Panduan pemilahan &amp; bank sampah</span></button>
   <button class="quick" data-go="komunitas"><i class="ico">🤝</i><b>Aksi Komunitas</b><span>Kegiatan belum tersedia</span></button>
  </div>
- <div class="card" id="homeReportSummary" role="status" style="margin-top:12px">
-  <h3>Ringkasan laporan saya</h3>
-  <p id="homeReportMessage" class="mut">Buat akun untuk melihat riwayat laporan dan mengumpulkan poin.</p>
-  <div id="homeReportStats" class="grid2" hidden>
-   <div><b id="homeReportsTotal">0</b><p class="mut">Dikirim</p></div>
-   <div><b id="homeReportsHandled">0</b><p class="mut">Ditangani</p></div>
-   <div><b id="homeReportsPending">0</b><p class="mut">Menunggu tindak lanjut</p></div>
-  </div>
-  <button class="btn s" data-go="lapor">Buka laporan saya</button>
- </div>
  <h2>Feed laporan publik</h2>
- <div class="card"><p class="mut">Laporan saat ini bersifat privat dan belum ditampilkan ke publik. Kamu hanya bisa melihat laporan milik akunmu.</p></div>
+ <div class="card"><p class="mut">Laporan yang dikirim tidak ditampilkan ke publik. Data diteruskan ke pengelola untuk diverifikasi.</p></div>
 </section>
 
 <!-- PETA -->
@@ -256,18 +191,13 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
  <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">SamosirLestari<small>Pangururan, Samosir</small></div></div>
  <div id="lmap" style="height:340px;border-radius:14px;border:1px solid var(--line);z-index:0"></div>
  <button class="btn s" id="locBtn" style="margin-top:8px">📍 Lokasi saya</button>
- <p id="mapReportInfo" class="mut" role="status" style="margin-top:8px">Masuk untuk melihat lokasi laporan akunmu.</p>
- <p class="mut" style="margin:6px 0">Peta dasar © OpenStreetMap. Pin hanya menampilkan laporan privat milik akun yang memiliki koordinat GPS.</p>
+ <p class="mut" style="margin:6px 0">Peta dasar © OpenStreetMap.</p>
 </section>
 
 <!-- LAPOR -->
 <section class="screen" id="lapor">
  <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Laporan Warga</h3></div>
- <p class="mut">Kirim laporan tanpa perlu masuk. Foto dan detail hanya dapat dilihat pengelola untuk ditinjau.</p>
- <div id="reportAuthPrompt" class="card" role="status">
-  <p class="mut">Nomor WhatsApp opsional untuk dihubungi terkait laporan. Masuk atau daftar jika ingin mengumpulkan poin dan menyimpan riwayat laporan.</p>
-  <button class="btn s" type="button" data-go="login">Masuk untuk fitur akun</button>
- </div>
+ <p class="mut">Kirim laporan tanpa membuat akun. Foto dan detail hanya dapat dilihat pengelola untuk ditinjau.</p>
  <form id="reportForm">
   <label for="reportPhoto">Foto bukti</label>
   <input id="reportPhoto" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" required>
@@ -298,41 +228,15 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
   <button class="btn" id="send" type="submit">Kirim laporan</button>
  </form>
  <div class="card" id="track" style="display:none;margin-top:12px" role="status" aria-live="polite"></div>
- <h2>Laporan saya</h2>
- <div id="myReports"><p class="mut">Masuk untuk melihat laporan Anda.</p></div>
+ <p class="mut" style="margin-top:8px">Simpan nomor referensi yang muncul setelah laporan terkirim untuk keperluan tindak lanjut.</p>
 </section>
 
 <!-- KOMUNITAS -->
 <section class="screen" id="komunitas">
  <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">Komunitas &amp; Aksi Warga<small>Kabupaten Samosir</small></div></div>
  <div class="card" role="status"><h3>Kegiatan belum tersedia</h3>
-  <p class="mut">Jadwal kegiatan, pendaftaran, dan kehadiran warga belum terhubung ke sumber data. Tidak ada kegiatan atau poin demo yang ditampilkan.</p>
+  <p class="mut">Jadwal kegiatan, pendaftaran, dan kehadiran warga belum terhubung ke sumber data.</p>
   <button class="btn s" data-go="lapor">Buat laporan warga</button></div>
-</section>
-
-<!-- PROFIL -->
-<section class="screen" id="profil">
- <div class="card" style="text-align:center"><button class="av" id="avBtn" aria-label="Ganti foto profil"><span class="ae">🙂</span><em>📷</em></button><input type="file" id="avFile" accept="image/*" hidden><button class="lnk" id="avDel" hidden>Hapus foto</button>
-  <h3 id="nameRow"><span class="uname">Tamu</span> <button class="btn s" id="nameEdit" aria-label="Ubah nama" hidden>✏️ Ubah</button></h3><div id="nameBox" style="display:none;margin:6px 0"><input type="text" id="nameIn" maxlength="30" aria-label="Nama kamu" placeholder="Nama kamu"><div class="row" style="margin-top:6px;justify-content:center"><button class="btn s" id="nameSave">Simpan</button><button class="btn s" id="nameCancel" style="background:transparent;border:1px solid var(--line)">Batal</button></div></div><p class="mut" id="accountMode">Mode tamu • Jelajah saja</p>
-  <div class="row" style="justify-content:center;margin-top:8px"><button class="pill points-notice" type="button" data-points-notice aria-label="Lihat notifikasi saldo poin">🪙 <span class="points-value">—</span> Poin</button></div></div>
- <div id="profileImpactEmpty" class="card" role="status" style="text-align:center">
-  <b id="profileImpactMessage">Masuk untuk melihat statistik laporan</b><p id="profileImpactHint" class="mut">Data laporan hanya ditampilkan untuk akun pemilik.</p>
- </div>
- <div id="profileImpactStats" hidden>
-  <h2>Statistik laporan saya</h2>
-  <div class="grid2">
-   <div class="card"><h1 id="profileReportsTotal">0</h1><p class="mut">Laporan dikirim</p></div>
-   <div class="card"><h1 id="profileReportsHandled">0</h1><p class="mut">Laporan ditangani</p></div>
-  </div>
-  <div class="card"><h1 id="profileReportsPending">0</h1><p class="mut">Menunggu tindak lanjut</p></div>
- </div>
- <h2>Pengaturan &amp; layanan warga</h2>
- <div class="card" data-go="lapor" style="cursor:pointer"><b>Riwayat laporan saya</b><p class="mut">Pantau laporan dan foto yang tersimpan</p></div>
-  <div class="card"><b>Notifikasi poin</b><p class="mut">Ketuk saldo poin untuk melihat notifikasi saldo terbaru.</p></div>
-  <div class="card"><b>Panduan warga</b><p class="mut">Gunakan formulir laporan untuk mengirim foto, kategori, dan lokasi masalah.</p></div>
- <button class="btn o" id="logoutButton" style="color:var(--red);border-color:var(--red)" hidden>Keluar akun</button>
- <button class="btn" id="guestLoginButton" data-go="login">Masuk atau daftar untuk berkontribusi</button>
- <p class="mut" style="text-align:center;margin-top:8px">SamosirLestari Samosir v2.4.1</p>
 </section>
 
 <!-- PILAH SAMPAH -->
@@ -361,7 +265,6 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
  <button data-go="peta"><span>🗺️</span>Peta</button>
  <button data-go="lapor" class="fab"><span>📷</span>Lapor</button>
  <button data-go="komunitas"><span>👥</span>Komunitas</button>
- <button data-go="profil"><span>👤</span>Profil</button>
 </nav>
 <div id="toast" role="status" aria-live="polite"></div>
 </div>
@@ -373,176 +276,36 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2200)}
 function go(id){
- if(passwordRecoveryMode&&id!=='passwordReset'){
-  passwordRecoveryMode=false;
-  const cleanUrl=new URL(window.location.href);
-  cleanUrl.searchParams.delete('password-reset');
-  cleanUrl.hash='';
-  history.replaceState(null,'',cleanUrl.pathname+cleanUrl.search);
- }
  $$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
  $('#app').classList.toggle('welcome',id==='onb');
- const main=['home','peta','lapor','komunitas','profil'];
+ const main=['home','peta','lapor','komunitas'];
  $('#nav').style.display=main.includes(id)?'flex':'none';
  $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
  $('#main').scrollTop=0;
- if(id==='lapor')loadMyReports();
- if(id==='profil'){
-  if(activeUserId)loadProfileStats({id:activeUserId});
-  else renderProfileStats();
- }
- if(id==='peta'){
-  initMap();
-  loadMyMapReports();
- }
+ if(id==='peta')initMap();
 }
 document.addEventListener('click',e=>{
- const pointButton=e.target.closest('[data-points-notice]');
- if(pointButton){
-  if(!activeUserId){toast('Masuk untuk melihat saldo poin akunmu.');return}
-  toast(`Notifikasi poin • saldo saat ini ${pointsBalance.toLocaleString('id-ID')} poin.`);
-  return;
- }
  const t=e.target.closest('[data-go]');if(t)go(t.dataset.go);
 });
 $('#entryScroll').onclick=()=>$('#entryHighlights').scrollIntoView({behavior:'smooth',block:'center'});
 
-/* Supabase Authentication */
+/* Supabase */
 const supabaseUrl=window.SUPABASE_CONFIG?.url?.trim();
 const supabaseAnonKey=window.SUPABASE_CONFIG?.anonKey?.trim();
-const authConfigured=Boolean(
+const supabaseConfigured=Boolean(
  supabaseUrl &&
  supabaseAnonKey &&
  !supabaseUrl.includes('ISI_') &&
  !supabaseAnonKey.includes('ISI_') &&
  window.supabase
 );
-const auth=authConfigured?window.supabase.createClient(supabaseUrl,supabaseAnonKey):null;
-let activeUserId=null;
-let pointsBalance=0;
-let pointsUserId=null;
-let profileStats=null;
-let profileStatsLoading=false;
-let profileStatsError='';
-let profileStatsRequestId=0;
-let LM=null,me=null,mapReportLayer=null,mapReportRequestId=0;
+const supabaseClient=supabaseConfigured?window.supabase.createClient(supabaseUrl,supabaseAnonKey,{
+ auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}
+}):null;
+let LM=null,me=null;
 const REPORT_BUCKET='report-photos';
 let reportCoordinates={latitude:null,longitude:null};
 let reportPhotoUrl=null;
-let passwordRecoveryMode=new URLSearchParams(window.location.search).has('password-reset');
-
-function renderPoints(){
- const value=activeUserId?pointsBalance.toLocaleString('id-ID'):'—';
- $$('.points-value').forEach(e=>e.textContent=value);
-}
-
-function renderProfileStats(){
- const hasCurrentStats=profileStats&&profileStats.userId===activeUserId;
- let showStats=false;
- let message='Belum ada laporan terkirim';
- let hint='Laporan yang kamu kirim akan tercatat di sini.';
- let homeMessage='Belum ada laporan terkirim.';
- if(!activeUserId){
-  message='Masuk untuk melihat riwayat dan statistik akun';
-  hint='Laporan tamu dikirim tanpa tersimpan di riwayat akun.';
-  homeMessage='Masuk untuk melihat ringkasan laporan.';
- }else if(profileStatsLoading){
-  message='Memuat statistik laporan...';
-  hint='Mengambil data laporan dari akun Supabase.';
-  homeMessage='Memuat ringkasan laporan...';
- }else if(profileStatsError){
-  message='Statistik laporan tidak dapat dimuat';
-  hint=profileStatsError;
-  homeMessage='Ringkasan laporan tidak dapat dimuat.';
- }else if(!hasCurrentStats){
-  message='Statistik laporan belum tersedia';
-  hint='Coba buka kembali profil setelah akun tersambung.';
-  homeMessage='Ringkasan laporan belum tersedia.';
- }else if(profileStats.total>0){
-  showStats=true;
-  homeMessage='';
-  $('#profileReportsTotal').textContent=profileStats.total.toLocaleString('id-ID');
-  $('#profileReportsHandled').textContent=profileStats.handled.toLocaleString('id-ID');
-  $('#profileReportsPending').textContent=profileStats.pending.toLocaleString('id-ID');
-  $('#homeReportsTotal').textContent=profileStats.total.toLocaleString('id-ID');
-  $('#homeReportsHandled').textContent=profileStats.handled.toLocaleString('id-ID');
-  $('#homeReportsPending').textContent=profileStats.pending.toLocaleString('id-ID');
- }
- $('#profileImpactStats').hidden=!showStats;
- $('#profileImpactEmpty').hidden=showStats;
- $('#profileImpactMessage').textContent=message;
- $('#profileImpactHint').textContent=hint;
- $('#homeReportStats').hidden=!showStats;
- $('#homeReportMessage').hidden=showStats;
- $('#homeReportMessage').textContent=homeMessage;
-}
-
-async function loadProfileStats(user){
- if(!auth||!user||activeUserId!==user.id)return {ok:false,message:'Statistik laporan tidak tersedia.'};
- const requestId=++profileStatsRequestId;
- profileStats=null;
- profileStatsError='';
- profileStatsLoading=true;
- renderProfileStats();
- let results;
- try{
-  const queries=[
-   auth.from('reports').select('id',{count:'exact',head:true}).eq('user_id',user.id),
-   auth.from('reports').select('id',{count:'exact',head:true}).eq('user_id',user.id).eq('status','handled'),
-   auth.from('reports').select('id',{count:'exact',head:true}).eq('user_id',user.id).in('status',['pending_verification','reviewing'])
-  ];
-  results=await Promise.all(queries);
- }catch(error){
-  if(activeUserId!==user.id||requestId!==profileStatsRequestId)return {ok:false,message:'Akun berubah sebelum statistik selesai dimuat.'};
-  profileStatsLoading=false;
-  profileStatsError=error instanceof Error?error.message:String(error);
-  renderProfileStats();
-  return {ok:false,message:`Statistik laporan gagal dimuat: ${profileStatsError}`};
- }
- if(activeUserId!==user.id||requestId!==profileStatsRequestId)return {ok:false,message:'Akun berubah sebelum statistik selesai dimuat.'};
- const [totalResult,handledResult,pendingResult]=results;
- const queryError=totalResult.error||handledResult.error||pendingResult.error;
- profileStatsLoading=false;
- if(queryError){
-  profileStatsError=queryError.message;
-  renderProfileStats();
-  return {ok:false,message:`Statistik laporan gagal dimuat: ${queryError.message}`};
- }
- profileStats={
-  userId:user.id,
-  total:totalResult.count||0,
-  handled:handledResult.count||0,
-  pending:pendingResult.count||0
- };
- renderProfileStats();
- return {ok:true};
-}
-
-async function loadPoints(user){
- if(!auth||!user)return {ok:false,message:'Saldo poin tidak tersedia.'};
- const previousUserId=pointsUserId;
- const previousBalance=pointsBalance;
- activeUserId=user.id;
- if(pointsUserId!==user.id){
-  pointsBalance=0;
-  renderPoints();
- }
- const {data,error}=await auth.from('point_balances').select('points').eq('user_id',user.id).maybeSingle();
- if(error){
-  return {ok:false,message:`Saldo poin gagal dimuat: ${error.message}`};
- }
- if(!data){
-  return {ok:false,message:'Saldo akun belum dibuat. Jalankan supabase-points.sql di Supabase.'};
- }
- if(activeUserId!==user.id)return {ok:false,message:'Akun berubah sebelum saldo poin selesai dimuat.'};
- pointsUserId=user.id;
- pointsBalance=Number(data.points);
- renderPoints();
- if(previousUserId===user.id&&previousBalance!==pointsBalance){
-  toast(`Notifikasi poin • saldo berubah menjadi ${pointsBalance.toLocaleString('id-ID')} poin.`);
- }
- return {ok:true};
-}
 
 function appendReportText(parent,tag,text,className){
  const element=document.createElement(tag);
@@ -550,61 +313,6 @@ function appendReportText(parent,tag,text,className){
  element.textContent=text;
  parent.appendChild(element);
  return element;
-}
-
-async function loadMyReports(){
- const container=$('#myReports');
- if(!auth||!activeUserId){
-  container.textContent='Riwayat akun hanya tersedia setelah masuk. Simpan nomor laporan tamu sebagai referensi.';
-  return;
- }
- const userId=activeUserId;
- container.textContent='Memuat laporan...';
- const {data,error}=await auth.from('reports')
-  .select('id,category,urgency,description,location_label,photo_path,status,created_at')
-  .eq('user_id',userId)
-  .order('created_at',{ascending:false})
-  .limit(20);
- if(activeUserId!==userId)return;
- if(error){
-  container.textContent=`Riwayat laporan gagal dimuat: ${error.message}`;
-  return;
- }
- container.replaceChildren();
- if(!data.length){
-  appendReportText(container,'p','Belum ada laporan.','mut');
-  return;
- }
- const categories={waste:'Sampah liar',streetlight:'Lampu jalan rusak',drainage:'Drainase atau banjir',green_space:'Ruang hijau',other:'Lainnya'};
- const statuses={pending_verification:'Menunggu verifikasi',reviewing:'Sedang ditinjau',handled:'Ditangani',rejected:'Ditolak'};
- for(const report of data){
-  const card=document.createElement('article');
-  card.className='card';
-  const row=document.createElement('div');
-  row.className='row';
-  appendReportText(row,'h3',categories[report.category]||'Laporan warga');
-  const spacer=document.createElement('span');
-  spacer.className='sp';
-  row.appendChild(spacer);
-  appendReportText(row,'span',statuses[report.status]||report.status,'pill');
-  card.appendChild(row);
-  appendReportText(card,'p',report.location_label,'mut');
-  if(report.description)appendReportText(card,'p',report.description);
-  appendReportText(card,'p',new Date(report.created_at).toLocaleString('id-ID'),'mut');
-  const {data:signedData,error:signedError}=await auth.storage.from(REPORT_BUCKET).createSignedUrl(report.photo_path,3600);
-  if(activeUserId!==userId)return;
-  if(signedError){
-   appendReportText(card,'p',`Foto tidak dapat dibuka: ${signedError.message}`,'mut');
-  }else{
-   const image=document.createElement('img');
-   image.className='photo-preview';
-   image.src=signedData.signedUrl;
-   image.alt=`Foto laporan kategori ${categories[report.category]||'lainnya'}`;
-   image.loading='lazy';
-   card.appendChild(image);
-  }
-  container.appendChild(card);
- }
 }
 
 async function prepareReportPhoto(file){
@@ -628,12 +336,12 @@ async function prepareReportPhoto(file){
  return new File([blob],`report-${Date.now()}.jpg`,{type:'image/jpeg'});
 }
 
-function showSavedReport(reportId,isGuest=false){
+function showSavedReport(reportId){
  const track=$('#track');
  track.replaceChildren();
  appendReportText(track,'span','Terkirim • Menunggu verifikasi','pill');
- appendReportText(track,'h3',isGuest?'Laporan tamu berhasil dikirim':'Laporan berhasil disimpan');
- appendReportText(track,'p',`Nomor laporan: ${reportId}${isGuest?' • simpan nomor ini untuk referensi':''}`,'mut');
+ appendReportText(track,'h3','Laporan berhasil dikirim');
+ appendReportText(track,'p',`Nomor laporan: ${reportId} • simpan nomor ini untuk referensi`,'mut');
  track.style.display='block';
  track.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
@@ -648,155 +356,6 @@ function createReportUuid(){
  const hex=Array.from(bytes,byte=>byte.toString(16).padStart(2,'0')).join('');
  return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
 }
-
-function setAuthStatus(message,isError=false){
- const status=$('#authStatus');
- const signupStatus=$('#signupStatus');
- [status,signupStatus].forEach(e=>{
-  if(e)e.innerHTML=`<p class="mut" ${isError?'style="color:var(--red)"':''}>${message}</p>`;
- });
-}
-
-if(!authConfigured){
- setAuthStatus('Autentikasi belum dikonfigurasi. Ikuti panduan README.md untuk menghubungkan Supabase.',true);
-}else{
- setAuthStatus('Autentikasi aktif. Akun akan tersimpan aman di Supabase.');
-}
-
-async function applyAuthenticatedUser(user){
- if(!user)return {ok:false,message:'Akun tidak ditemukan.'};
- activeUserId=user.id;
- const [pointResult]=await Promise.all([loadPoints(user),loadProfileStats(user)]);
- const name=user.user_metadata?.full_name?.trim();
- if(name){
-  prof.name=name;
-  try{localStorage.setItem(PK,JSON.stringify(prof))}catch(e){}
- }
- renderProf();
- return pointResult;
-}
-
-if(auth){
- auth.auth.getSession().then(async({data:{session}})=>{
-  if(session&&!passwordRecoveryMode){
-   const result=await applyAuthenticatedUser(session.user);
-   if(!result.ok)toast(result.message);
-   go('home');
-  }
- });
- auth.auth.onAuthStateChange((event,session)=>{
-  if(event==='PASSWORD_RECOVERY'){
-   passwordRecoveryMode=true;
-   go('passwordReset');
-   return;
-  }
-  if(session){
-   if(passwordRecoveryMode)return;
-   applyAuthenticatedUser(session.user).then(result=>{if(!result.ok)toast(result.message)});
-  }else{
-   activeUserId=null;
-   pointsBalance=0;
-   pointsUserId=null;
-   profileStats=null;
-   profileStatsLoading=false;
-   profileStatsError='';
-   profileStatsRequestId++;
-   mapReportRequestId++;
-   if(mapReportLayer)mapReportLayer.clearLayers();
-   renderPoints();
-   renderProfileStats();
-   $('#mapReportInfo').textContent='Masuk untuk melihat lokasi laporan akunmu.';
-   prof.name='Pengguna';
-   renderProf();
-  }
- });
-}
-
-$('#forgotPasswordButton').onclick=async()=>{
- const email=$('#loginEmail').value.trim();
- if(!email){$('#loginEmail').focus();toast('Masukkan email akunmu terlebih dahulu.');return}
- if(!auth){toast('Autentikasi belum dikonfigurasi.');return}
- const button=$('#forgotPasswordButton');
- button.disabled=true;
- const redirectTo=new URL(window.location.pathname,window.location.origin);
- redirectTo.searchParams.set('password-reset','1');
- const {error}=await auth.auth.resetPasswordForEmail(email,{redirectTo:redirectTo.toString()});
- button.disabled=false;
- if(error){toast(`Tautan reset gagal dikirim: ${error.message}`);return}
- toast('Jika email terdaftar, tautan reset kata sandi akan dikirim.');
-};
-
-$('#passwordResetForm').addEventListener('submit',async e=>{
- e.preventDefault();
- const password=$('#newPassword').value;
- if(password.length<8){toast('Kata sandi minimal 8 karakter.');$('#newPassword').focus();return}
- if(password!==$('#confirmNewPassword').value){toast('Kata sandi belum sama.');$('#confirmNewPassword').focus();return}
- if(!auth){toast('Autentikasi belum dikonfigurasi.');return}
- if(!passwordRecoveryMode){toast('Buka tautan pemulihan dari email untuk mengatur kata sandi.');return}
- const button=e.submitter;
- button.disabled=true;
- const {data,error}=await auth.auth.updateUser({password});
- button.disabled=false;
- if(error){toast(`Kata sandi gagal diperbarui: ${error.message}`);return}
- passwordRecoveryMode=false;
- if(data.user)await applyAuthenticatedUser(data.user);
- const cleanUrl=new URL(window.location.href);
- cleanUrl.searchParams.delete('password-reset');
- cleanUrl.hash='';
- history.replaceState(null,'',cleanUrl.pathname+cleanUrl.search);
- $('#passwordResetForm').reset();
- toast('Kata sandi berhasil diperbarui.');
- go('home');
-});
-
-$('#loginForm').addEventListener('submit',async e=>{
- e.preventDefault();
- if(!auth){setAuthStatus('Autentikasi belum dikonfigurasi. Ikuti panduan README.md.',true);return}
- const button=e.submitter;
- button.disabled=true;
- const {data,error}=await auth.auth.signInWithPassword({
-  email:$('#loginEmail').value.trim(),
-  password:$('#loginPassword').value
- });
- button.disabled=false;
- if(error){
-  setAuthStatus(error.message,true);
-  return;
- }
- const pointResult=await applyAuthenticatedUser(data.user);
- toast(pointResult.ok?`Berhasil masuk • saldo poin ${pointsBalance.toLocaleString('id-ID')}`:`Berhasil masuk, tetapi ${pointResult.message}`);
- $('#loginForm').reset();
- go('home');
-});
-$('#signupForm').addEventListener('submit',async e=>{
- e.preventDefault();
- if($('#signupPassword').value!==$('#signupConfirm').value){toast('Kata sandi belum sama');$('#signupConfirm').focus();return}
- if(!auth){setAuthStatus('Autentikasi belum dikonfigurasi. Ikuti panduan README.md.',true);return}
- const button=e.submitter;
- button.disabled=true;
- const {data,error}=await auth.auth.signUp({
-  email:$('#signupEmail').value.trim(),
-  password:$('#signupPassword').value,
-  options:{
-   data:{full_name:$('#signupName').value.trim()},
-   emailRedirectTo:window.location.href.replace(/[#?].*$/,'')
-  }
- });
- button.disabled=false;
- if(error){
-  setAuthStatus(error.message,true);
-  return;
- }
- if(data.session){
-  const pointResult=await applyAuthenticatedUser(data.user);
-  toast(pointResult.ok?'Pendaftaran berhasil. Akun sudah aktif.':`Pendaftaran berhasil, tetapi ${pointResult.message}`);
-  $('#signupForm').reset();
-  go('home');
- }else{
-  setAuthStatus('Pendaftaran berhasil. Periksa email untuk mengonfirmasi akun sebelum masuk.');
-  $('#signupForm').reset();
- }
-});
 
 /* Chip & tab visual toggles (semua layar) */
 $$('.chips:not([data-filter]), .tabs').forEach(g=>g.addEventListener('click',e=>{const c=e.target.closest('.chip,.tab');if(!c)return;g.querySelectorAll('.chip,.tab').forEach(x=>x.classList.toggle('on',x===c))}));
@@ -854,9 +413,7 @@ $('#desc').oninput=e=>$('#cnt').textContent=e.target.value.length+'/300';
 $$('#urg button').forEach(b=>b.onclick=()=>$$('#urg button').forEach(x=>x.classList.toggle('on',x===b)));
 $('#reportForm').addEventListener('submit',async e=>{
  e.preventDefault();
- if(!auth){toast('Layanan laporan belum tersedia. Coba lagi nanti.');return}
- const userId=activeUserId;
- const isGuest=!userId;
+ if(!supabaseClient){toast('Layanan laporan belum tersedia. Coba lagi nanti.');return}
  const file=$('#reportPhoto').files[0];
  if(!file){toast('Pilih foto bukti terlebih dahulu.');return}
  const locationLabel=$('#reportLocation').value.trim();
@@ -872,8 +429,8 @@ $('#reportForm').addEventListener('submit',async e=>{
   if(preparedPhoto.size>5*1024*1024)throw new Error('Foto setelah diproses masih melebihi 5 MB.');
   const objectId=createReportUuid();
   const reportId=createReportUuid();
-  photoPath=`${isGuest?'guest':userId}/${objectId}.jpg`;
-  const {error:uploadError}=await auth.storage.from(REPORT_BUCKET).upload(photoPath,preparedPhoto,{
+  photoPath=`guest/${objectId}.jpg`;
+  const {error:uploadError}=await supabaseClient.storage.from(REPORT_BUCKET).upload(photoPath,preparedPhoto,{
    contentType:'image/jpeg',
    cacheControl:'3600',
    upsert:false
@@ -883,7 +440,7 @@ $('#reportForm').addEventListener('submit',async e=>{
 
   const reportPayload={
    id:reportId,
-   user_id:userId,
+   user_id:null,
    category:$('#reportCategory').value,
    urgency:$('#urg button.on').dataset.value,
    description:$('#desc').value.trim(),
@@ -893,12 +450,9 @@ $('#reportForm').addEventListener('submit',async e=>{
    photo_path:photoPath,
    contact_whatsapp:$('#reportWhatsapp').value.trim()||null
   };
-  const reportResult=isGuest
-   ?await auth.from('reports').insert(reportPayload)
-   :await auth.from('reports').insert(reportPayload).select('id').single();
-  const {data:report,error:insertError}=reportResult;
+  const {error:insertError}=await supabaseClient.from('reports').insert(reportPayload);
   if(insertError){
-   const {error:cleanupError}=await auth.storage.from(REPORT_BUCKET).remove([photoPath]);
+   const {error:cleanupError}=await supabaseClient.storage.from(REPORT_BUCKET).remove([photoPath]);
    if(cleanupError){
     photoUploaded=false;
     throw new Error(`Laporan gagal disimpan: ${insertError.message}. Pembersihan foto juga gagal: ${cleanupError.message}`);
@@ -910,7 +464,7 @@ $('#reportForm').addEventListener('submit',async e=>{
 
   photoUploaded=false;
   photoPath=null;
-  showSavedReport(isGuest?reportId:report.id,isGuest);
+  showSavedReport(reportId);
   $('#reportForm').reset();
   if(reportPhotoUrl)URL.revokeObjectURL(reportPhotoUrl);
   reportPhotoUrl=null;
@@ -920,15 +474,11 @@ $('#reportForm').addEventListener('submit',async e=>{
   $('#locationInfo').textContent='Lokasi GPS opsional; Anda juga dapat mengetik lokasi.';
   reportCoordinates={latitude:null,longitude:null};
   $$('#urg button').forEach(option=>option.classList.toggle('on',option.dataset.value==='medium'));
-  if(userId){
-   await loadMyReports();
-   await loadProfileStats({id:userId});
-  }
   toast('Laporan dan foto berhasil disimpan.');
  }catch(error){
   let message=error.message||'Terjadi kesalahan yang tidak diketahui.';
   if(photoUploaded&&photoPath){
-   const {error:cleanupError}=await auth.storage.from(REPORT_BUCKET).remove([photoPath]);
+   const {error:cleanupError}=await supabaseClient.storage.from(REPORT_BUCKET).remove([photoPath]);
    if(cleanupError)message+=` Foto sementara juga gagal dibersihkan: ${cleanupError.message}`;
   }
   toast(`Laporan gagal dikirim: ${message}`);
@@ -938,84 +488,15 @@ $('#reportForm').addEventListener('submit',async e=>{
  }
 });
 
-/* Profil: nama akun dan foto lokal */
-const PK='tl_profile';let prof={name:'Pengguna',photo:''};
-try{const s=localStorage.getItem(PK);if(s)prof=Object.assign(prof,JSON.parse(s))}catch(e){}
-function saveProf(){try{localStorage.setItem(PK,JSON.stringify(prof))}catch(e){toast('Belum bisa disimpan permanen di perangkat ini')}}
-function renderProf(){
- const canEdit=Boolean(auth&&activeUserId);
- const photo=canEdit?prof.photo:'';
- if(!canEdit){$('#nameBox').style.display='none';$('#nameRow').style.display=''}
- $$('.uname').forEach(e=>e.textContent=canEdit?prof.name:'Tamu');
- $$('.av,.avs').forEach(e=>{e.style.backgroundImage=photo?'url('+photo+')':'';e.querySelector('.ae').style.display=photo?'none':''});
- $('#avBtn').disabled=!canEdit;
- $('#avBtn em').hidden=!canEdit;
- $('#avFile').disabled=!canEdit;
- $('#avDel').hidden=!canEdit||!prof.photo;
- $('#nameEdit').hidden=!canEdit;
- $('#accountMode').textContent=canEdit?'Akun warga • Kabupaten Samosir':'Mode tamu • Lapor tanpa akun';
- $('#logoutButton').hidden=!canEdit;
- $('#guestLoginButton').hidden=canEdit;
- $('#reportForm').hidden=false;
-}
-$('#avBtn').onclick=()=>{if(!activeUserId){toast('Masuk ke akun untuk mengubah foto profil.');return}$('#avFile').click()};
-$('#avFile').onchange=e=>{
- const f=e.target.files[0];if(!f)return;
- if(!activeUserId){e.target.value='';toast('Masuk ke akun untuk mengubah foto profil.');return}
- if(!f.type.startsWith('image/')){toast('Pilih file gambar (JPG atau PNG)');return}
- const r=new FileReader();
- r.onerror=()=>toast('Foto tidak bisa dibaca, coba foto lain');
- r.onload=()=>{const im=new Image();
-  im.onerror=()=>toast('Format foto tidak didukung');
-  im.onload=()=>{const s=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=256;
-   c.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,256,256);
-   prof.photo=c.toDataURL('image/jpeg',.82);saveProf();renderProf();toast('Foto profil diperbarui')};
-  im.src=r.result};
- r.readAsDataURL(f);e.target.value='';
-};
-$('#avDel').onclick=()=>{if(!activeUserId){toast('Masuk ke akun untuk mengubah foto profil.');return}prof.photo='';saveProf();renderProf();toast('Foto profil dihapus')};
-function nameBox(open){
-  if(open&&!activeUserId){toast('Masuk ke akun untuk mengubah nama profil.');return}
-  $('#nameBox').style.display=open?'block':'none';
-  $('#nameRow').style.display=open?'none':'';
-  if(open){$('#nameIn').value=prof.name;$('#nameIn').focus()}
-}
-$('#nameEdit').onclick=()=>nameBox(true);
-$('#nameCancel').onclick=()=>nameBox(false);
-async function saveName(){const v=$('#nameIn').value.trim().replace(/\s+/g,' ');
-  if(!auth||!activeUserId){toast('Masuk ke akun untuk mengubah nama profil.');nameBox(false);return}
- if(v.length<2){toast('Nama minimal 2 huruf');return}
-  const {error}=await auth.auth.updateUser({data:{full_name:v}});
-  if(error){toast(error.message);return}
- prof.name=v;saveProf();renderProf();nameBox(false);toast('Nama diperbarui')}
-$('#nameSave').onclick=saveName;
-$('#nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')saveName();if(e.key==='Escape')nameBox(false)});
-$('#logoutButton').onclick=async()=>{
- if(!activeUserId){go('login');return}
- if(auth){
-  const {error}=await auth.auth.signOut();
-  if(error){toast(error.message);return}
- }
- prof={name:'Pengguna',photo:''};
- try{localStorage.removeItem(PK)}catch(e){}
- renderProf();
- toast('Anda telah keluar');
- go('onb');
-};
-renderProf();
-if(passwordRecoveryMode)go('passwordReset');
-
 /* Peta asli (Leaflet + OpenStreetMap) */
 function initMap(){
  if(typeof L==='undefined'){
   $('#lmap').textContent='Peta belum bisa dimuat. Periksa koneksi internet.';
-  $('#mapReportInfo').textContent='Peta belum tersedia.';
   return;
  }
  if(LM){setTimeout(()=>LM.invalidateSize(),50);return}
  LM=L.map('lmap').setView([2.63,98.72],11);
  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; kontributor OpenStreetMap'}).addTo(LM);
- mapReportLayer=L.layerGroup().addTo(LM);
  $('#locBtn').onclick=()=>{
   if(!window.isSecureContext){toast('Lokasi hanya jalan di alamat https setelah dihosting, bukan dari file di komputer');return}
   if(!navigator.geolocation){toast('Browser ini tidak mendukung lokasi');return}
@@ -1027,77 +508,6 @@ function initMap(){
   navigator.geolocation.getCurrentPosition(ok,e=>{if(e.code===1){fail(e);return}
    navigator.geolocation.getCurrentPosition(ok,fail,{enableHighAccuracy:false,timeout:15000,maximumAge:60000})},{enableHighAccuracy:true,timeout:8000});
  };
-}
-
-async function loadMyMapReports(){
- const requestId=++mapReportRequestId;
- if(mapReportLayer)mapReportLayer.clearLayers();
- if(!auth||!activeUserId){
-  $('#mapReportInfo').textContent='Masuk untuk melihat lokasi laporan akunmu.';
-  return;
- }
- if(!LM||!mapReportLayer){
-  $('#mapReportInfo').textContent='Peta belum siap untuk menampilkan laporan.';
-  return;
- }
- const userId=activeUserId;
- $('#mapReportInfo').textContent='Memuat lokasi laporan...';
- let result;
- try{
-  result=await auth.from('reports')
-   .select('category,urgency,location_label,latitude,longitude,status,created_at')
-   .eq('user_id',userId)
-   .not('latitude','is',null)
-   .not('longitude','is',null)
-   .order('created_at',{ascending:false})
-   .limit(100);
- }catch(error){
-  if(requestId!==mapReportRequestId||activeUserId!==userId)return;
-  $('#mapReportInfo').textContent=`Lokasi laporan gagal dimuat: ${error instanceof Error?error.message:String(error)}`;
-  return;
- }
- if(requestId!==mapReportRequestId||activeUserId!==userId)return;
- if(result.error){
-  $('#mapReportInfo').textContent=`Lokasi laporan gagal dimuat: ${result.error.message}`;
-  return;
- }
- const reports=(result.data||[]).filter(report=>
-  Number.isFinite(Number(report.latitude))&&Number.isFinite(Number(report.longitude))
- );
- if(!reports.length){
-  $('#mapReportInfo').textContent='Belum ada laporan dengan koordinat GPS. Laporan tanpa GPS tetap tersedia di riwayat akunmu.';
-  return;
- }
- const categories={
-  waste:'Sampah liar',
-  streetlight:'Lampu jalan rusak',
-  drainage:'Drainase atau banjir',
-  green_space:'Ruang hijau',
-  other:'Lainnya'
- };
- const statuses={
-  pending_verification:'Menunggu verifikasi',
-  reviewing:'Sedang ditinjau',
-  handled:'Ditangani',
-  rejected:'Ditolak'
- };
- reports.forEach(report=>{
-  const marker=L.marker([Number(report.latitude),Number(report.longitude)],{
-   title:`${categories[report.category]||'Laporan'} • ${statuses[report.status]||'Status belum tersedia'}`
-  }).addTo(mapReportLayer);
-  const popup=document.createElement('div');
-  const title=document.createElement('strong');
-  title.textContent=categories[report.category]||'Laporan warga';
-  const location=document.createElement('p');
-  location.textContent=report.location_label;
-  const status=document.createElement('p');
-  status.textContent=statuses[report.status]||'Status belum tersedia';
-  popup.append(title,location,status);
-  marker.bindPopup(popup);
- });
- if(reports.length===1)LM.setView([Number(reports[0].latitude),Number(reports[0].longitude)],14);
- else LM.fitBounds(mapReportLayer.getBounds(),{padding:[24,24],maxZoom:14});
- $('#mapReportInfo').textContent=`Menampilkan ${reports.length.toLocaleString('id-ID')} lokasi laporan GPS milik akunmu.`;
 }
 </script>
 </body>
