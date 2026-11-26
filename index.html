@@ -57,6 +57,9 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
 .steps li{list-style:none;display:flex;gap:10px;padding:6px 0}.dot{width:20px;height:20px;border-radius:50%;background:var(--g5);color:#fff;font-size:11px;display:grid;place-items:center;flex:none}.dot.w{background:var(--line);color:var(--mut)}
 .scan{height:150px;border-radius:14px;background:radial-gradient(circle at 50% 40%,#28799c,#123b58);display:grid;place-items:center;color:#fff;border:2px dashed #98d7f0;text-align:center;font-size:12px}
 .photo-preview{display:block;width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin-top:8px;background:var(--g0)}
+.report-honeypot{display:none!important}
+.report-rate-message{margin-top:8px}
+.report-rate-message.warning{color:var(--red);font-weight:700}
 .bars{display:flex;align-items:flex-end;gap:8px;height:90px}.bars div{flex:1;background:var(--g5);border-radius:6px 6px 0 0;position:relative}.bars small{position:absolute;bottom:-16px;left:0;right:0;text-align:center;font-size:10px;color:var(--mut)}
 #toast{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--g0);padding:10px 16px;border-radius:99px;font-size:12px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:90%}
 #toast.on{opacity:1}
@@ -201,9 +204,10 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
  <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Laporan Warga</h3></div>
  <p class="mut">Kirim laporan tanpa membuat akun. Foto dan detail hanya dapat dilihat pengelola untuk ditinjau.</p>
  <form id="reportForm">
+  <input class="report-honeypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Jangan isi kolom ini">
   <label for="reportPhoto">Foto bukti</label>
   <input id="reportPhoto" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" required>
-  <p class="mut" id="photoInfo">JPG, PNG, atau WebP. Maksimal 5 MB.</p>
+  <p class="mut" id="photoInfo">JPG, PNG, atau WebP. Maksimal 5 MB sebelum kompresi.</p>
   <img id="photoPreview" class="photo-preview" alt="Pratinjau foto laporan" hidden>
   <label for="reportCategory">Kategori masalah</label>
   <select id="reportCategory" required>
@@ -226,8 +230,9 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
    <button type="button" data-value="medium" class="on">Sedang</button>
    <button type="button" data-value="high">Tinggi</button>
   </div>
-  <p class="mut" style="margin-top:8px">Laporan tidak ditampilkan ke publik. Simpan nomor laporan setelah berhasil dikirim.</p>
+  <p class="mut" style="margin-top:8px">Laporan tidak ditampilkan ke publik. Simpan nomor referensi setelah berhasil dikirim.</p>
   <button class="btn" id="send" type="submit">Kirim laporan</button>
+  <p class="mut report-rate-message" id="reportRateMessage" role="status" aria-live="polite" hidden></p>
  </form>
  <div class="card" id="track" style="display:none;margin-top:12px" role="status" aria-live="polite"></div>
  <p class="mut" style="margin-top:8px">Simpan nomor referensi yang muncul setelah laporan terkirim untuk keperluan tindak lanjut.</p>
@@ -374,6 +379,15 @@ const REPORT_BUCKET='report-photos';
 const RESOLUTION_BUCKET='report-resolution-photos';
 let reportCoordinates={latitude:null,longitude:null};
 let reportPhotoUrl=null;
+let reportCompressedPhoto=null;
+let reportCompressedPhotoSource=null;
+let reportPhotoProcessing=false;
+let reportPhotoSelectionId=0;
+const REPORT_RATE_KEY='samosir-report-submission-times';
+const REPORT_RATE_LIMIT=3;
+const REPORT_RATE_WINDOW_MS=15*60*1000;
+const REPORT_PHOTO_MAX_BYTES=500*1000;
+const REPORT_PHOTO_MAX_DIMENSION=1280;
 
 function appendReportText(parent,tag,text,className){
  const element=document.createElement(tag);
@@ -385,23 +399,107 @@ function appendReportText(parent,tag,text,className){
 
 async function prepareReportPhoto(file){
  const bitmap=await createImageBitmap(file);
- const scale=Math.min(1,1600/bitmap.width,1600/bitmap.height);
+ try{
+ if(!bitmap.width||!bitmap.height)throw new Error('Foto tidak memiliki dimensi yang valid.');
+ const scale=Math.min(1,REPORT_PHOTO_MAX_DIMENSION/bitmap.width,REPORT_PHOTO_MAX_DIMENSION/bitmap.height);
+ let width=Math.max(1,Math.round(bitmap.width*scale));
+ let height=Math.max(1,Math.round(bitmap.height*scale));
  const canvas=document.createElement('canvas');
- canvas.width=Math.round(bitmap.width*scale);
- canvas.height=Math.round(bitmap.height*scale);
  const context=canvas.getContext('2d');
- if(!context){
-  bitmap.close();
-  throw new Error('Foto tidak dapat diproses di browser ini.');
+ if(!context)throw new Error('Foto tidak dapat diproses di browser ini.');
+ const encode=async(quality)=>{
+  canvas.width=width;
+  canvas.height=height;
+  context.fillStyle='#fff';
+  context.fillRect(0,0,width,height);
+  context.drawImage(bitmap,0,0,width,height);
+  return new Promise((resolve,reject)=>canvas.toBlob(
+   result=>result?resolve(result):reject(new Error('Foto gagal dikompres.')),
+   'image/jpeg',
+   quality
+  ));
+ };
+ let quality=0.75;
+ let blob=await encode(quality);
+ while(blob.size>REPORT_PHOTO_MAX_BYTES&&Math.max(width,height)>640){
+  width=Math.max(1,Math.round(width*0.9));
+  height=Math.max(1,Math.round(height*0.9));
+  blob=await encode(quality);
  }
- context.drawImage(bitmap,0,0,canvas.width,canvas.height);
- bitmap.close();
- const blob=await new Promise((resolve,reject)=>canvas.toBlob(
-  result=>result?resolve(result):reject(new Error('Foto gagal dikompres.')),
-  'image/jpeg',
-  0.82
- ));
+ for(const fallbackQuality of [0.7,0.65,0.6,0.55]){
+  if(blob.size<=REPORT_PHOTO_MAX_BYTES)break;
+  quality=fallbackQuality;
+  blob=await encode(quality);
+ }
+ while(blob.size>REPORT_PHOTO_MAX_BYTES&&Math.max(width,height)>320){
+  width=Math.max(1,Math.round(width*0.85));
+  height=Math.max(1,Math.round(height*0.85));
+  blob=await encode(quality);
+ }
+ if(blob.size>REPORT_PHOTO_MAX_BYTES){
+  throw new Error('Foto tidak dapat dikompres hingga di bawah 500 KB. Coba pilih foto lain.');
+ }
  return new File([blob],`report-${Date.now()}.jpg`,{type:'image/jpeg'});
+ }finally{
+ bitmap.close();
+ }
+}
+
+function formatPhotoSize(bytes){
+ if(bytes>=1024*1024)return `${(bytes/(1024*1024)).toFixed(1)} MB`;
+ return `${Math.max(1,Math.round(bytes/1024))} KB`;
+}
+
+function setReportRateMessage(message,warning=false){
+ const element=$('#reportRateMessage');
+ element.textContent=message;
+ element.hidden=!message;
+ element.classList.toggle('warning',warning);
+}
+
+function getRecentReportSubmissions(now=Date.now()){
+ const stored=window.localStorage.getItem(REPORT_RATE_KEY);
+ if(!stored)return [];
+ let timestamps;
+ try{
+ timestamps=JSON.parse(stored);
+ }catch(error){
+ throw new Error('Data pembatasan pengiriman rusak. Hapus data situs atau coba lagi nanti.');
+ }
+ if(!Array.isArray(timestamps)||timestamps.some(timestamp=>!Number.isFinite(timestamp))){
+ throw new Error('Data pembatasan pengiriman tidak valid. Hapus data situs atau coba lagi nanti.');
+ }
+ return timestamps.filter(timestamp=>timestamp<=now&&now-timestamp<REPORT_RATE_WINDOW_MS);
+}
+
+function getReportRateLimit(now=Date.now()){
+ const timestamps=getRecentReportSubmissions(now);
+ if(timestamps.length<REPORT_RATE_LIMIT)return {limited:false,timestamps};
+ const retryAt=Math.min(...timestamps)+REPORT_RATE_WINDOW_MS;
+ return {limited:now<retryAt,timestamps,retryAt};
+}
+
+function formatReportWait(milliseconds){
+ const seconds=Math.max(1,Math.ceil(milliseconds/1000));
+ const minutes=Math.floor(seconds/60);
+ const remainingSeconds=seconds%60;
+ return minutes?`${minutes} menit ${remainingSeconds} detik`:`${remainingSeconds} detik`;
+}
+
+function reserveReportSubmission(now=Date.now()){
+ const rateLimit=getReportRateLimit(now);
+ if(rateLimit.limited)return rateLimit;
+ const timestamps=rateLimit.timestamps;
+ timestamps.push(now);
+ window.localStorage.setItem(REPORT_RATE_KEY,JSON.stringify(timestamps));
+ return {limited:false,reservedAt:now};
+}
+
+function releaseReportSubmission(reservedAt){
+ const timestamps=getRecentReportSubmissions();
+ const reservationIndex=timestamps.indexOf(reservedAt);
+ if(reservationIndex!==-1)timestamps.splice(reservationIndex,1);
+ window.localStorage.setItem(REPORT_RATE_KEY,JSON.stringify(timestamps));
 }
 
 function showSavedReport(reportReference){
@@ -827,10 +925,22 @@ $$('.chips:not([data-filter]), .tabs').forEach(g=>g.addEventListener('click',e=>
 /* Laporan warga */
 $('#reportPhoto').addEventListener('change',e=>{
  const file=e.target.files[0];
+ const selectionId=++reportPhotoSelectionId;
  if(reportPhotoUrl)URL.revokeObjectURL(reportPhotoUrl);
  reportPhotoUrl=null;
+ reportCompressedPhoto=null;
+ reportCompressedPhotoSource=null;
+ reportPhotoProcessing=false;
+ $('#send').disabled=false;
+ $('#send').textContent='Kirim laporan';
  $('#photoPreview').hidden=true;
- if(!file){$('#photoInfo').textContent='JPG, PNG, atau WebP. Maksimal 5 MB.';return}
+ if(!file){
+  reportPhotoProcessing=false;
+  $('#send').disabled=false;
+  $('#send').textContent='Kirim laporan';
+  $('#photoInfo').textContent='JPG, PNG, atau WebP. Maksimal 5 MB sebelum kompresi.';
+  return;
+ }
  if(!['image/jpeg','image/png','image/webp'].includes(file.type)){
   e.target.value='';
   $('#photoInfo').textContent='Format foto tidak didukung. Pilih JPG, PNG, atau WebP.';
@@ -838,13 +948,31 @@ $('#reportPhoto').addEventListener('change',e=>{
  }
  if(file.size>5*1024*1024){
   e.target.value='';
-  $('#photoInfo').textContent='Ukuran foto melebihi 5 MB.';
+  $('#photoInfo').textContent='Ukuran foto asli melebihi batas 5 MB.';
   return;
  }
- reportPhotoUrl=URL.createObjectURL(file);
- $('#photoPreview').src=reportPhotoUrl;
- $('#photoPreview').hidden=false;
- $('#photoInfo').textContent=`${file.name} • ${(file.size/1024/1024).toFixed(2)} MB`;
+ reportPhotoProcessing=true;
+ $('#send').disabled=true;
+ $('#send').textContent='Mengompresi foto...';
+ $('#photoInfo').textContent='Foto sedang dikompresi...';
+ prepareReportPhoto(file).then(compressedPhoto=>{
+  if(selectionId!==reportPhotoSelectionId)return;
+  reportCompressedPhoto=compressedPhoto;
+  reportCompressedPhotoSource=file;
+  reportPhotoUrl=URL.createObjectURL(compressedPhoto);
+  $('#photoPreview').src=reportPhotoUrl;
+  $('#photoPreview').hidden=false;
+  $('#photoInfo').textContent=`Dikompresi: ${formatPhotoSize(file.size)} → ${formatPhotoSize(compressedPhoto.size)}. Pratinjau menampilkan foto hasil kompresi.`;
+ }).catch(error=>{
+  if(selectionId!==reportPhotoSelectionId)return;
+  e.target.value='';
+  $('#photoInfo').textContent=`Foto gagal dikompresi: ${error.message||'Terjadi kesalahan yang tidak diketahui.'}`;
+ }).finally(()=>{
+  if(selectionId!==reportPhotoSelectionId)return;
+  reportPhotoProcessing=false;
+  $('#send').disabled=false;
+  $('#send').textContent='Kirim laporan';
+ });
 });
 
 $('#reportLocationButton').onclick=()=>{
@@ -877,11 +1005,30 @@ $('#desc').oninput=e=>$('#cnt').textContent=e.target.value.length+'/300';
 $$('#urg button').forEach(b=>b.onclick=()=>$$('#urg button').forEach(x=>x.classList.toggle('on',x===b)));
 $('#reportForm').addEventListener('submit',async e=>{
  e.preventDefault();
+ if(e.currentTarget.elements.namedItem('website').value.trim())return;
  if(!supabaseClient){toast('Layanan laporan belum tersedia. Coba lagi nanti.');return}
  const file=$('#reportPhoto').files[0];
  if(!file){toast('Pilih foto bukti terlebih dahulu.');return}
+ if(reportPhotoProcessing){toast('Tunggu hingga foto selesai dikompresi.');return}
+ if(!reportCompressedPhoto||reportCompressedPhotoSource!==file){
+  toast('Pilih kembali foto agar dapat dikompresi sebelum dikirim.');
+  return;
+ }
  const locationLabel=$('#reportLocation').value.trim();
  if(!locationLabel){$('#reportLocation').focus();toast('Isi lokasi laporan terlebih dahulu.');return}
+ let reportReservation;
+ try{
+  reportReservation=reserveReportSubmission();
+ }catch(error){
+  setReportRateMessage(`Pengiriman tidak dapat dibatasi karena penyimpanan browser bermasalah: ${error.message}`,true);
+  return;
+ }
+ if(reportReservation.limited){
+  setReportRateMessage(`Anda sudah mengirim 3 laporan dalam 15 menit terakhir. Silakan coba lagi dalam ${formatReportWait(reportReservation.retryAt-Date.now())}.`,true);
+  return;
+ }
+ let reportRateReservation=reportReservation.reservedAt;
+ setReportRateMessage('');
  const button=$('#send');
  button.disabled=true;
  button.textContent='Mengirim laporan...';
@@ -889,8 +1036,7 @@ $('#reportForm').addEventListener('submit',async e=>{
  let photoPath=null;
  let photoUploaded=false;
  try{
-  const preparedPhoto=await prepareReportPhoto(file);
-  if(preparedPhoto.size>5*1024*1024)throw new Error('Foto setelah diproses masih melebihi 5 MB.');
+  const preparedPhoto=reportCompressedPhoto;
   const objectId=createReportUuid();
   const reportId=createReportUuid();
   const reportReference=createReportReference();
@@ -930,19 +1076,32 @@ $('#reportForm').addEventListener('submit',async e=>{
 
   photoUploaded=false;
   photoPath=null;
+  reportRateReservation=null;
   showSavedReport(reportReference);
   $('#reportForm').reset();
   if(reportPhotoUrl)URL.revokeObjectURL(reportPhotoUrl);
   reportPhotoUrl=null;
+  reportCompressedPhoto=null;
+  reportCompressedPhotoSource=null;
+  reportPhotoProcessing=false;
+  reportPhotoSelectionId++;
   $('#photoPreview').removeAttribute('src');
   $('#photoPreview').hidden=true;
-  $('#photoInfo').textContent='JPG, PNG, atau WebP. Maksimal 5 MB.';
+  $('#photoInfo').textContent='JPG, PNG, atau WebP. Maksimal 5 MB sebelum kompresi.';
   $('#locationInfo').textContent='Lokasi GPS opsional; Anda juga dapat mengetik lokasi.';
   reportCoordinates={latitude:null,longitude:null};
   $$('#urg button').forEach(option=>option.classList.toggle('on',option.dataset.value==='medium'));
+  setReportRateMessage('');
   toast('Laporan dan foto berhasil disimpan.');
  }catch(error){
   let message=error.message||'Terjadi kesalahan yang tidak diketahui.';
+  if(reportRateReservation!==null){
+   try{
+    releaseReportSubmission(reportRateReservation);
+   }catch(releaseError){
+    message+=` Pembatasan lokal tidak dapat dilepas setelah kegagalan: ${releaseError.message}`;
+   }
+  }
   if(photoUploaded&&photoPath){
    const {error:cleanupError}=await supabaseClient.storage.from(REPORT_BUCKET).remove([photoPath]);
    if(cleanupError)message+=` Foto sementara juga gagal dibersihkan: ${cleanupError.message}`;
