@@ -50,7 +50,7 @@ h1{font-size:22px;line-height:1.2}h2{font-size:16px;margin:18px 0 8px}h3{font-si
 .pin.r{background:var(--red)}.pin.a{background:var(--amb)}.pin.g{background:var(--g5)}
 .road{position:absolute;background:#fff;opacity:.8}
 label{display:block;font-weight:700;font-size:12px;margin:12px 0 4px}
-select,textarea,input[type=text],input[type=email],input[type=password]{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;background:var(--card);color:var(--ink)}
+select,textarea,input[type=text],input[type=email],input[type=password],input[type=tel]{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;background:var(--card);color:var(--ink)}
 .seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .seg button{flex:1;border:0;padding:9px;background:var(--card);color:var(--ink);font:inherit;font-weight:600;cursor:pointer}.seg button.on{background:var(--g7);color:#fff}
 .tabs{display:flex;gap:6px;margin-bottom:10px}.tab{flex:1;border:0;padding:9px;border-radius:10px;background:var(--g1);color:var(--accent-text);font:inherit;font-weight:700;cursor:pointer}.tab.on{background:var(--g7);color:#fff}
@@ -168,7 +168,7 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
     <button class="btn" data-go="login">Masuk</button>
     <button class="btn o" data-go="signup">Daftar akun</button>
    </div>
-   <button class="btn s" data-go="home">Jelajahi sebagai tamu</button>
+   <button class="btn s" data-go="home">Jelajahi &amp; lapor tanpa akun</button>
   </div>
   <div class="entry-highlights" id="entryHighlights" aria-label="Fitur SamosirLestari">
    <button class="entry-highlight" type="button" data-go="peta"><span class="entry-icon" aria-hidden="true">🗺️</span><span><b>Peta Danau Toba</b><small>Jelajahi peta dan lokasi laporan akun</small></span></button>
@@ -228,7 +228,7 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
  <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">SamosirLestari<small>Kabupaten Samosir</small></div><span class="sp"></span><button class="pill points-notice" type="button" data-points-notice aria-label="Lihat notifikasi saldo poin">🪙 <span class="points-value">—</span> Poin</button><button class="avs" data-go="profil" aria-label="Buka profil"><span class="ae">🙂</span></button></div>
  <h1>Halo, <span class="uname">Pengguna</span> 👋</h1><p class="mut">Kabupaten Samosir</p>
  <div class="card" style="margin-top:12px"><h3>Laporan lingkungan warga</h3>
-  <p class="mut">Kirim foto dan detail masalah yang kamu temukan. Laporan tersimpan privat di akunmu untuk ditinjau.</p>
+  <p class="mut">Kirim laporan tanpa akun. Buat akun hanya jika ingin mengumpulkan poin dan melihat riwayat laporan akun.</p>
   <button class="btn s" data-go="lapor">Buat laporan</button></div>
  <h2>Aksi cepat warga</h2>
  <div class="grid2">
@@ -239,7 +239,7 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
  </div>
  <div class="card" id="homeReportSummary" role="status" style="margin-top:12px">
   <h3>Ringkasan laporan saya</h3>
-  <p id="homeReportMessage" class="mut">Masuk untuk melihat ringkasan laporan.</p>
+  <p id="homeReportMessage" class="mut">Buat akun untuk melihat riwayat laporan dan mengumpulkan poin.</p>
   <div id="homeReportStats" class="grid2" hidden>
    <div><b id="homeReportsTotal">0</b><p class="mut">Dikirim</p></div>
    <div><b id="homeReportsHandled">0</b><p class="mut">Ditangani</p></div>
@@ -263,12 +263,12 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
 <!-- LAPOR -->
 <section class="screen" id="lapor">
  <div class="top"><button class="btn s" data-go="home" aria-label="Kembali">←</button><h3>Laporan Warga</h3></div>
- <p class="mut">Unggah foto dan isi detailnya. Laporan serta foto disimpan privat di akun Anda.</p>
+ <p class="mut">Kirim laporan tanpa perlu masuk. Foto dan detail hanya dapat dilihat pengelola untuk ditinjau.</p>
  <div id="reportAuthPrompt" class="card" role="status">
-  <p class="mut">Mode tamu hanya dapat melihat konten. Masuk atau daftar untuk mengirim laporan.</p>
-  <button class="btn s" type="button" data-go="login">Masuk untuk melapor</button>
+  <p class="mut">Nomor WhatsApp opsional untuk dihubungi terkait laporan. Masuk atau daftar jika ingin mengumpulkan poin dan menyimpan riwayat laporan.</p>
+  <button class="btn s" type="button" data-go="login">Masuk untuk fitur akun</button>
  </div>
- <form id="reportForm" hidden>
+ <form id="reportForm">
   <label for="reportPhoto">Foto bukti</label>
   <input id="reportPhoto" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" required>
   <p class="mut" id="photoInfo">JPG, PNG, atau WebP. Maksimal 5 MB.</p>
@@ -283,6 +283,9 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
   <input id="reportLocation" type="text" maxlength="200" placeholder="Nama jalan, desa, atau patokan" required>
   <button class="btn s" type="button" id="reportLocationButton" style="margin-top:6px">📍 Gunakan lokasi GPS</button>
   <p class="mut" id="locationInfo">Lokasi GPS opsional; Anda juga dapat mengetik lokasi.</p>
+  <label for="reportWhatsapp">Nomor WhatsApp (opsional)</label>
+  <input id="reportWhatsapp" type="tel" maxlength="30" autocomplete="tel" placeholder="Contoh: 081234567890">
+  <p class="mut">Hanya digunakan pengelola untuk tindak lanjut laporan, bukan untuk pesan otomatis.</p>
   <label for="desc">Keterangan <span class="mut" id="cnt">0/300</span></label>
   <textarea id="desc" rows="3" maxlength="300" placeholder="Jelaskan masalah yang ditemukan."></textarea>
   <label>Tingkat urgensi</label>
@@ -291,7 +294,7 @@ select,textarea,input[type=text],input[type=email],input[type=password]{width:10
    <button type="button" data-value="medium" class="on">Sedang</button>
    <button type="button" data-value="high">Tinggi</button>
   </div>
-  <p class="mut" style="margin-top:8px">Foto hanya dapat dilihat oleh pemilik akun. Laporan belum ditampilkan ke publik.</p>
+  <p class="mut" style="margin-top:8px">Laporan tidak ditampilkan ke publik. Simpan nomor laporan setelah berhasil dikirim.</p>
   <button class="btn" id="send" type="submit">Kirim laporan</button>
  </form>
  <div class="card" id="track" style="display:none;margin-top:12px" role="status" aria-live="polite"></div>
@@ -440,8 +443,8 @@ function renderProfileStats(){
  let hint='Laporan yang kamu kirim akan tercatat di sini.';
  let homeMessage='Belum ada laporan terkirim.';
  if(!activeUserId){
-  message='Masuk untuk melihat statistik laporan';
-  hint='Data laporan hanya ditampilkan untuk akun pemilik.';
+  message='Masuk untuk melihat riwayat dan statistik akun';
+  hint='Laporan tamu dikirim tanpa tersimpan di riwayat akun.';
   homeMessage='Masuk untuk melihat ringkasan laporan.';
  }else if(profileStatsLoading){
   message='Memuat statistik laporan...';
@@ -552,7 +555,7 @@ function appendReportText(parent,tag,text,className){
 async function loadMyReports(){
  const container=$('#myReports');
  if(!auth||!activeUserId){
-  container.textContent='Masuk untuk melihat laporan Anda.';
+  container.textContent='Riwayat akun hanya tersedia setelah masuk. Simpan nomor laporan tamu sebagai referensi.';
   return;
  }
  const userId=activeUserId;
@@ -625,14 +628,25 @@ async function prepareReportPhoto(file){
  return new File([blob],`report-${Date.now()}.jpg`,{type:'image/jpeg'});
 }
 
-function showSavedReport(reportId){
+function showSavedReport(reportId,isGuest=false){
  const track=$('#track');
  track.replaceChildren();
  appendReportText(track,'span','Terkirim • Menunggu verifikasi','pill');
- appendReportText(track,'h3','Laporan berhasil disimpan');
- appendReportText(track,'p',`Nomor laporan: ${reportId}`,'mut');
+ appendReportText(track,'h3',isGuest?'Laporan tamu berhasil dikirim':'Laporan berhasil disimpan');
+ appendReportText(track,'p',`Nomor laporan: ${reportId}${isGuest?' • simpan nomor ini untuk referensi':''}`,'mut');
  track.style.display='block';
  track.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function createReportUuid(){
+ if(window.crypto?.randomUUID)return window.crypto.randomUUID();
+ if(!window.crypto?.getRandomValues)throw new Error('Browser tidak mendukung pembuatan nomor laporan yang aman.');
+ const bytes=new Uint8Array(16);
+ window.crypto.getRandomValues(bytes);
+ bytes[6]=(bytes[6]&0x0f)|0x40;
+ bytes[8]=(bytes[8]&0x3f)|0x80;
+ const hex=Array.from(bytes,byte=>byte.toString(16).padStart(2,'0')).join('');
+ return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;
 }
 
 function setAuthStatus(message,isError=false){
@@ -840,12 +854,9 @@ $('#desc').oninput=e=>$('#cnt').textContent=e.target.value.length+'/300';
 $$('#urg button').forEach(b=>b.onclick=()=>$$('#urg button').forEach(x=>x.classList.toggle('on',x===b)));
 $('#reportForm').addEventListener('submit',async e=>{
  e.preventDefault();
- if(!auth||!activeUserId){
-  toast('Masuk ke akun terlebih dahulu untuk mengirim laporan.');
-  go('login');
-  return;
- }
+ if(!auth){toast('Layanan laporan belum tersedia. Coba lagi nanti.');return}
  const userId=activeUserId;
+ const isGuest=!userId;
  const file=$('#reportPhoto').files[0];
  if(!file){toast('Pilih foto bukti terlebih dahulu.');return}
  const locationLabel=$('#reportLocation').value.trim();
@@ -859,10 +870,9 @@ $('#reportForm').addEventListener('submit',async e=>{
  try{
   const preparedPhoto=await prepareReportPhoto(file);
   if(preparedPhoto.size>5*1024*1024)throw new Error('Foto setelah diproses masih melebihi 5 MB.');
-  const objectId=window.crypto?.randomUUID
-   ?window.crypto.randomUUID()
-   :`${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  photoPath=`${userId}/${objectId}.jpg`;
+  const objectId=createReportUuid();
+  const reportId=createReportUuid();
+  photoPath=`${isGuest?'guest':userId}/${objectId}.jpg`;
   const {error:uploadError}=await auth.storage.from(REPORT_BUCKET).upload(photoPath,preparedPhoto,{
    contentType:'image/jpeg',
    cacheControl:'3600',
@@ -871,7 +881,8 @@ $('#reportForm').addEventListener('submit',async e=>{
   if(uploadError)throw new Error(`Unggah foto gagal: ${uploadError.message}`);
   photoUploaded=true;
 
-  const {data:report,error:insertError}=await auth.from('reports').insert({
+  const reportPayload={
+   id:reportId,
    user_id:userId,
    category:$('#reportCategory').value,
    urgency:$('#urg button.on').dataset.value,
@@ -879,8 +890,13 @@ $('#reportForm').addEventListener('submit',async e=>{
    location_label:locationLabel,
    latitude:reportCoordinates.latitude,
    longitude:reportCoordinates.longitude,
-   photo_path:photoPath
-  }).select('id').single();
+   photo_path:photoPath,
+   contact_whatsapp:$('#reportWhatsapp').value.trim()||null
+  };
+  const reportResult=isGuest
+   ?await auth.from('reports').insert(reportPayload)
+   :await auth.from('reports').insert(reportPayload).select('id').single();
+  const {data:report,error:insertError}=reportResult;
   if(insertError){
    const {error:cleanupError}=await auth.storage.from(REPORT_BUCKET).remove([photoPath]);
    if(cleanupError){
@@ -894,7 +910,7 @@ $('#reportForm').addEventListener('submit',async e=>{
 
   photoUploaded=false;
   photoPath=null;
-  showSavedReport(report.id);
+  showSavedReport(isGuest?reportId:report.id,isGuest);
   $('#reportForm').reset();
   if(reportPhotoUrl)URL.revokeObjectURL(reportPhotoUrl);
   reportPhotoUrl=null;
@@ -904,8 +920,10 @@ $('#reportForm').addEventListener('submit',async e=>{
   $('#locationInfo').textContent='Lokasi GPS opsional; Anda juga dapat mengetik lokasi.';
   reportCoordinates={latitude:null,longitude:null};
   $$('#urg button').forEach(option=>option.classList.toggle('on',option.dataset.value==='medium'));
-  await loadMyReports();
-  await loadProfileStats({id:userId});
+  if(userId){
+   await loadMyReports();
+   await loadProfileStats({id:userId});
+  }
   toast('Laporan dan foto berhasil disimpan.');
  }catch(error){
   let message=error.message||'Terjadi kesalahan yang tidak diketahui.';
@@ -935,11 +953,10 @@ function renderProf(){
  $('#avFile').disabled=!canEdit;
  $('#avDel').hidden=!canEdit||!prof.photo;
  $('#nameEdit').hidden=!canEdit;
- $('#accountMode').textContent=canEdit?'Akun warga • Kabupaten Samosir':'Mode tamu • Jelajah saja';
+ $('#accountMode').textContent=canEdit?'Akun warga • Kabupaten Samosir':'Mode tamu • Lapor tanpa akun';
  $('#logoutButton').hidden=!canEdit;
  $('#guestLoginButton').hidden=canEdit;
- $('#reportForm').hidden=!canEdit;
- $('#reportAuthPrompt').hidden=canEdit;
+ $('#reportForm').hidden=false;
 }
 $('#avBtn').onclick=()=>{if(!activeUserId){toast('Masuk ke akun untuk mengubah foto profil.');return}$('#avFile').click()};
 $('#avFile').onchange=e=>{

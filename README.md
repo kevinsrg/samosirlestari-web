@@ -14,8 +14,8 @@ Proyek ini sudah terhubung ke alur autentikasi Supabase di sisi browser:
 - Pemulihan kata sandi melalui email
 - Logout
 - Sinkronisasi nama profil ke metadata akun
-- Mode tamu hanya untuk menjelajah; perubahan profil dan pengiriman laporan
-  memerlukan akun
+- Laporan dapat dikirim tanpa akun; akun hanya dibutuhkan untuk fitur profil,
+  poin, dan riwayat laporan akun
 
 ### 1. Buat project Supabase
 
@@ -60,24 +60,35 @@ Lalu buka `http://localhost:5500`.
 ## Laporan foto di Supabase
 
 Form laporan mengunggah foto ke bucket privat `report-photos` dan menyimpan
-detailnya ke tabel `public.reports`. Data serta foto hanya dapat dibaca pemilik
-akun; laporan belum dipublikasikan ke feed umum.
+detailnya ke tabel `public.reports`. Pengguna dapat mengirim laporan tanpa akun;
+nomor WhatsApp bersifat opsional untuk tindak lanjut pengelola. Laporan tamu
+tidak dapat dibaca lewat aplikasi dan tidak muncul di riwayat akun. Foto serta
+data laporan tidak dipublikasikan ke feed umum.
 Beranda dan profil menghitung laporan dikirim, ditangani, dan menunggu tindak
 lanjut dari data laporan milik akun. Peta hanya menampilkan laporan privat milik
 akun yang memiliki koordinat GPS. Feed publik, data CO₂, aksi komunitas, lencana,
 lokasi bank sampah, dan rekomendasi rute belum tersedia karena belum ada sumber
 data terverifikasi untuk fitur-fitur tersebut.
 
-Jalankan [supabase-reports.sql](supabase-reports.sql) satu kali melalui
-`Supabase Dashboard -> SQL Editor -> New query -> Run`. Skrip ini membuat tabel,
-bucket privat, dan Row Level Security untuk akun. Unggahan dibatasi sampai 5 MB;
-browser mengecilkan foto dan mengubahnya ke JPEG sebelum diunggah.
+Jalankan [supabase-reports.sql](supabase-reports.sql) melalui
+`Supabase Dashboard -> SQL Editor -> New query -> Run`. Jalankan ulang skrip ini
+jika tabel laporan sudah pernah dibuat: skrip juga menerapkan perubahan skema
+untuk laporan tamu. Skrip membuat bucket privat dan kebijakan Row Level Security
+agar akun hanya membaca laporannya sendiri, sementara tamu hanya dapat mengirim
+laporan/foto ke folder khusus tanpa izin membaca data. Unggahan dibatasi sampai
+5 MB; browser mengecilkan foto dan mengubahnya ke JPEG sebelum diunggah.
 
-Setelah SQL berhasil dijalankan, buka situs melalui HTTPS atau localhost,
-masuk ke akun, lalu gunakan **Lapor Masalah**. Pilih foto, kategori, isi lokasi
-dan keterangan, lalu kirim. GPS bersifat opsional. Laporan baru berstatus
-`Menunggu verifikasi`; menu **Laporan saya** menampilkan laporan dan foto yang
-tersimpan.
+Setelah SQL berhasil dijalankan, buka situs melalui HTTPS atau localhost dan
+gunakan **Lapor Masalah** tanpa perlu masuk. Pilih foto, kategori, isi lokasi
+dan keterangan, lalu kirim. GPS dan nomor WhatsApp bersifat opsional. Laporan
+baru berstatus `Menunggu verifikasi`; setelah laporan tamu terkirim, simpan
+nomor referensi yang ditampilkan. Riwayat dan foto laporan akun tetap hanya
+tersedia setelah masuk.
+
+Kebijakan anon membatasi jenis operasi dan folder unggahan, tetapi endpoint
+laporan tamu tetap dapat menerima spam otomatis. Untuk penggunaan publik dengan
+volume tinggi, tambahkan CAPTCHA dan pembatasan laju di sisi server sebelum
+mengandalkan laporan tamu sebagai kanal terverifikasi.
 
 ## Saldo poin per akun
 
