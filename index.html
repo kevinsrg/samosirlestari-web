@@ -74,7 +74,15 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
 .collection-point,.green-route,.community-event{margin-bottom:10px}
 .material-list{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 .material-tag{border-radius:99px;background:var(--g1);color:var(--accent-text);padding:4px 9px;font-size:11px;font-weight:700}
-.map-disclaimer{margin:8px 0}
+.map-disclaimer{display:flex;align-items:flex-start;gap:8px;margin:8px 0;padding:10px 12px;border:1px solid var(--g5);border-radius:12px;background:var(--page-glass);backdrop-filter:blur(10px);color:var(--ink);font-size:12px}
+.map-disclaimer p{margin:0}
+.map-disclaimer-icon{width:20px;height:20px;display:grid;place-items:center;flex:none;border-radius:50%;background:var(--g7);color:#fff;font-size:12px;font-weight:800}
+.community-plans{border:1px solid var(--g5);background:var(--page-glass);box-shadow:0 6px 20px rgba(21,59,88,.12)}
+.report-success-dialog{border-top:5px solid var(--g5);text-align:center}
+.report-success-dialog h2{margin:10px 0}
+.report-success-reference{display:block;margin:12px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--g1);color:var(--ink);font-size:22px;font-weight:800;letter-spacing:.04em;overflow-wrap:anywhere}
+.report-success-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:14px}
+.report-success-actions .btn{width:100%;margin-top:0}
 .event-dialog{width:min(92vw,440px);max-height:90vh;overflow:auto;border:1px solid var(--line);border-radius:16px;padding:18px;background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .event-dialog::backdrop{background:rgba(8,28,42,.62)}
 .event-dialog form{margin:0}
@@ -234,8 +242,8 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
 <section class="screen" id="peta">
  <div class="top"><i class="lg" aria-hidden="true"></i><div class="logo">SamosirLestari<small>Pangururan, Samosir</small></div></div>
  <div id="lmap" style="height:340px;border-radius:14px;border:1px solid var(--line);z-index:0"></div>
+ <div class="map-disclaimer" role="note"><span class="map-disclaimer-icon" aria-hidden="true">i</span><p>Peta dasar © OpenStreetMap. Titik fasilitas merupakan perkiraan area, bukan alamat resmi yang telah diverifikasi; hubungi pengelola setempat sebelum datang.</p></div>
  <button class="btn s" id="locBtn" style="margin-top:8px">📍 Lokasi saya</button>
- <p class="mut map-disclaimer">Peta dasar © OpenStreetMap. Titik fasilitas merupakan perkiraan area, bukan alamat resmi yang telah diverifikasi; hubungi pengelola setempat sebelum datang.</p>
 </section>
 
 <!-- LAPOR -->
@@ -343,7 +351,7 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
  <div class="card"><h3>Aksi bersama untuk Samosir</h3>
   <p class="mut">Jadwal yang tampil sudah dipublikasikan pengelola. Pendaftaran warga tidak memerlukan akun. Nomor WhatsApp hanya dapat dilihat pengelola acara.</p></div>
  <div id="communityEvents" aria-live="polite"><p class="mut">Memuat kegiatan...</p></div>
- <div class="card"><h3>Contoh rencana kegiatan</h3>
+ <div class="card community-plans"><h3>💡 Contoh rencana kegiatan</h3>
   <ul class="mut" style="padding-left:20px">
    <li>Aksi bersih Pantai Pasir Putih Parbaba</li>
    <li>Penanaman pohon di Pangururan</li>
@@ -400,6 +408,18 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
   <p id="eventRegistrationMessage" class="mut event-dialog-message" role="status" aria-live="polite" hidden></p>
   <button class="btn" id="eventRegistrationSubmit" type="submit">Daftar tanpa akun</button>
  </form>
+</dialog>
+
+<dialog class="event-dialog report-success-dialog" id="reportSuccessDialog" aria-labelledby="reportSuccessTitle" aria-describedby="reportSuccessReminder">
+ <span class="pill">Laporan berhasil dikirim</span>
+ <h2 id="reportSuccessTitle">Simpan Nomor Referensi</h2>
+ <p>Gunakan nomor ini untuk mengecek status laporan Anda.</p>
+ <strong class="report-success-reference" id="reportSuccessReference"></strong>
+ <p class="mut" id="reportSuccessReminder">Simpan nomor referensi ini. Nomor tersebut diperlukan untuk mengecek status laporan.</p>
+ <div class="report-success-actions">
+  <button class="btn" type="button" id="copyReportSuccessReference">Salin Nomor Referensi</button>
+  <button class="btn o" type="button" id="closeReportSuccess">Tutup</button>
+ </div>
 </dialog>
 
 <nav class="nav" id="nav" aria-label="Menu utama" style="display:none">
@@ -471,6 +491,7 @@ let reportPhotoSelectionId=0;
 const REPORT_RATE_KEY='samosir-report-submission-times';
 const REPORT_RATE_LIMIT=3;
 const REPORT_RATE_WINDOW_MS=15*60*1000;
+const PUBLIC_DATA_TIMEOUT_MS=10000;
 const REPORT_PHOTO_MAX_BYTES=400*1000;
 const REPORT_PHOTO_MAX_DIMENSION=1280;
 
@@ -626,6 +647,34 @@ function releaseReportSubmission(reservedAt){
  window.localStorage.setItem(REPORT_RATE_KEY,JSON.stringify(timestamps));
 }
 
+function bindReferenceCopyButton(button,getReference){
+ let resetTimer=null;
+ button.addEventListener('click',async()=>{
+  button.disabled=true;
+  try{
+   await copyTextToClipboard(getReference());
+   button.textContent='Tersalin!';
+   if(resetTimer)clearTimeout(resetTimer);
+   resetTimer=window.setTimeout(()=>{
+    if(button.isConnected)button.textContent='Salin Nomor Referensi';
+   },2000);
+  }catch(error){
+   toast(`Nomor referensi tidak dapat disalin: ${error.message||'Silakan salin secara manual.'}`);
+  }finally{
+   button.disabled=false;
+  }
+ });
+}
+
+function createReferenceCopyButton(reference){
+ const button=document.createElement('button');
+ button.type='button';
+ button.className='btn s';
+ button.textContent='Salin Nomor Referensi';
+ bindReferenceCopyButton(button,()=>reference);
+ return button;
+}
+
 function showSavedReport(report){
  const track=$('#track');
  track.replaceChildren();
@@ -646,22 +695,7 @@ function showSavedReport(report){
  track.appendChild(details);
  const actions=document.createElement('div');
  actions.className='report-proof-actions';
- const copyButton=document.createElement('button');
- copyButton.type='button';
- copyButton.className='btn s';
- copyButton.textContent='Salin Nomor Referensi';
- copyButton.addEventListener('click',async()=>{
-  copyButton.disabled=true;
-  try{
-   await copyTextToClipboard(report.reference);
-   toast('Tersalin!');
-  }catch(error){
-   toast(`Nomor referensi tidak dapat disalin: ${error.message||'Silakan salin secara manual.'}`);
-  }finally{
-   copyButton.disabled=false;
-  }
- });
- actions.appendChild(copyButton);
+ actions.appendChild(createReferenceCopyButton(report.reference));
  const shareText=[
   'Bukti laporan lingkungan SamosirLestari',
   `Nomor referensi: ${report.reference}`,
@@ -682,6 +716,8 @@ function showSavedReport(report){
  });
  track.appendChild(statusButton);
  track.style.display='block';
+ $('#reportSuccessReference').textContent=report.reference;
+ $('#reportSuccessDialog').showModal();
  track.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
@@ -717,22 +753,40 @@ const reportCategoryLabels={
  other:'Lainnya'
 };
 let publicStatsRequestId=0;
+let publicStatsRequestController=null;
+function setPublicStatsFallback(message){
+ ['#publicTotalReports','#publicInProgressReports','#publicCompletedReports']
+  .forEach(selector=>$(selector).textContent='0');
+ $('#publicStatsStatus').textContent=message;
+}
+
 async function loadPublicReportStats(){
  const requestId=++publicStatsRequestId;
+ if(publicStatsRequestController){
+  publicStatsRequestController.abort();
+  publicStatsRequestController=null;
+ }
  const status=$('#publicStatsStatus');
  const statElements=['#publicTotalReports','#publicInProgressReports','#publicCompletedReports'];
  statElements.forEach(selector=>$(selector).textContent='—');
  if(!supabaseClient){
-  status.textContent='Statistik belum tersedia karena layanan belum dikonfigurasi.';
+  setPublicStatsFallback('Statistik belum tersedia. Menampilkan angka awal 0.');
   return;
  }
  status.textContent='Memuat statistik...';
+ const controller=new AbortController();
+ publicStatsRequestController=controller;
+ const timeoutId=window.setTimeout(()=>controller.abort(),PUBLIC_DATA_TIMEOUT_MS);
  try{
-  const {data,error}=await supabaseClient.rpc('get_public_report_stats');
+  const {data,error}=await supabaseClient.rpc('get_public_report_stats')
+   .abortSignal(controller.signal);
   if(error)throw new Error(error.message);
   if(requestId!==publicStatsRequestId)return;
   const stats=Array.isArray(data)?data[0]:null;
-  if(!stats)throw new Error('Respons statistik kosong.');
+  if(!stats){
+   setPublicStatsFallback('Belum ada data laporan. Statistik ditampilkan sebagai 0.');
+   return;
+  }
   const values=[stats.total_reports,stats.in_progress_reports,stats.completed_reports];
   const counts=values.map(value=>Number(value));
   if(counts.some(count=>!Number.isSafeInteger(count)||count<0)){
@@ -743,8 +797,11 @@ async function loadPublicReportStats(){
   status.textContent=`Diperbarui pukul ${new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}.`;
  }catch(error){
   if(requestId!==publicStatsRequestId)return;
-  console.error('Statistik laporan publik gagal dimuat:',error);
-  status.textContent='Statistik belum dapat dimuat. Coba muat ulang halaman nanti.';
+  console.warn('Statistik laporan publik gagal dimuat:',error);
+  setPublicStatsFallback('Data statistik belum dapat dimuat. Menampilkan angka awal 0.');
+ }finally{
+  window.clearTimeout(timeoutId);
+  if(publicStatsRequestController===controller)publicStatsRequestController=null;
  }
 }
 const urgencyLabels={low:'Rendah',medium:'Sedang',high:'Tinggi'};
@@ -762,6 +819,8 @@ const greenRoutes=[
 ];
 let adminAuthorized=false;
 let adminRequestId=0;
+let communityRequestId=0;
+let communityRequestController=null;
 
 function showStatusLookupMessage(message){
  const box=$('#statusLookupMessage');
@@ -1223,31 +1282,47 @@ function renderCommunityEvent(event){
 }
 
 async function loadCommunityEvents(){
+ const requestId=++communityRequestId;
+ if(communityRequestController){
+  communityRequestController.abort();
+  communityRequestController=null;
+ }
  const container=$('#communityEvents');
  container.replaceChildren();
  appendReportText(container,'p','Memuat kegiatan...','mut');
- if(!supabaseClient){
+ const showFallback=()=>{
   container.replaceChildren();
-  appendReportText(container,'p','Daftar acara belum dapat dimuat karena layanan belum tersedia.','mut');
+  appendReportText(container,'p','Jadwal resmi kegiatan akan segera diumumkan. Sementara itu, lihat contoh rencana kegiatan di bawah ini.','mut');
+ };
+ if(!supabaseClient){
+  showFallback();
   return;
  }
+ const controller=new AbortController();
+ communityRequestController=controller;
+ const timeoutId=window.setTimeout(()=>controller.abort(),PUBLIC_DATA_TIMEOUT_MS);
  try{
   const {data,error}=await supabaseClient.from('community_events')
    .select('id,title,description,location_label,latitude,longitude,starts_at,ends_at,capacity')
    .eq('is_active',true)
    .gte('ends_at',new Date().toISOString())
-   .order('starts_at',{ascending:true});
+   .order('starts_at',{ascending:true})
+   .abortSignal(controller.signal);
+  if(requestId!==communityRequestId)return;
   if(error)throw new Error(error.message);
   container.replaceChildren();
   if(!data?.length){
-   appendReportText(container,'p','Belum ada jadwal kegiatan terverifikasi yang dibuka untuk pendaftaran.','mut');
+   showFallback();
    return;
   }
   for(const event of data)container.appendChild(renderCommunityEvent(event));
  }catch(error){
-  container.replaceChildren();
-  appendReportText(container,'p',`Daftar kegiatan belum dapat dimuat: ${error.message||'Terjadi kesalahan yang tidak diketahui.'}`,'mut');
-  appendReportText(container,'p','Pastikan migrasi community_events sudah dijalankan di Supabase.','mut');
+  if(requestId!==communityRequestId)return;
+  console.warn('Jadwal komunitas gagal dimuat:',error);
+  showFallback();
+ }finally{
+  window.clearTimeout(timeoutId);
+  if(communityRequestController===controller)communityRequestController=null;
  }
 }
 
@@ -1275,6 +1350,11 @@ document.addEventListener('click',event=>{
 $('#closeEventRegistration').addEventListener('click',()=>$('#eventRegistrationDialog').close());
 $('#eventRegistrationDialog').addEventListener('click',event=>{
  if(event.target===$('#eventRegistrationDialog'))$('#eventRegistrationDialog').close();
+});
+bindReferenceCopyButton($('#copyReportSuccessReference'),()=>$('#reportSuccessReference').textContent);
+$('#closeReportSuccess').addEventListener('click',()=>$('#reportSuccessDialog').close());
+$('#reportSuccessDialog').addEventListener('click',event=>{
+ if(event.target===$('#reportSuccessDialog'))$('#reportSuccessDialog').close();
 });
 $('#communityRegistrationForm').addEventListener('submit',async event=>{
  event.preventDefault();
