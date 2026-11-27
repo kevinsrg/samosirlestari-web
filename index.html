@@ -57,6 +57,10 @@ select,textarea,input[type=text],input[type=email],input[type=password],input[ty
 .steps li{list-style:none;display:flex;gap:10px;padding:6px 0}.dot{width:20px;height:20px;border-radius:50%;background:var(--g5);color:#fff;font-size:11px;display:grid;place-items:center;flex:none}.dot.w{background:var(--line);color:var(--mut)}
 .scan{height:150px;border-radius:14px;background:radial-gradient(circle at 50% 40%,#28799c,#123b58);display:grid;place-items:center;color:#fff;border:2px dashed #98d7f0;text-align:center;font-size:12px}
 .photo-preview{display:block;width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin-top:8px;background:var(--g0)}
+.report-proof-details{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:5px 12px;margin:12px 0}
+.report-proof-details dd{overflow-wrap:anywhere}
+.report-proof-actions,.community-event-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px}
+.report-proof-actions .btn,.community-event-actions .btn{width:100%;margin-top:0}
 .report-honeypot{display:none!important}
 .report-rate-message{margin-top:8px}
 .report-rate-message.warning{color:var(--red);font-weight:700}
@@ -450,7 +454,7 @@ let reportPhotoSelectionId=0;
 const REPORT_RATE_KEY='samosir-report-submission-times';
 const REPORT_RATE_LIMIT=3;
 const REPORT_RATE_WINDOW_MS=15*60*1000;
-const REPORT_PHOTO_MAX_BYTES=500*1000;
+const REPORT_PHOTO_MAX_BYTES=400*1000;
 const REPORT_PHOTO_MAX_DIMENSION=1280;
 
 function appendReportText(parent,tag,text,className){
@@ -459,6 +463,45 @@ function appendReportText(parent,tag,text,className){
  element.textContent=text;
  parent.appendChild(element);
  return element;
+}
+
+function getSiteUrl(){
+ return new URL('./',window.location.href).href;
+}
+
+function createSamosirWhatsAppShareLink(text,label,className='btn s'){
+ const link=document.createElement('a');
+ link.className=className;
+ link.href=`https://wa.me/?text=${encodeURIComponent(text)}`;
+ link.target='_blank';
+ link.rel='noopener noreferrer';
+ link.textContent=label;
+ return link;
+}
+
+async function copyTextToClipboard(text){
+ if(navigator.clipboard?.writeText){
+  try{
+   await navigator.clipboard.writeText(text);
+   return;
+  }catch(error){
+   // Fall back for browsers or contexts that deny Clipboard API access.
+  }
+ }
+ const input=document.createElement('textarea');
+ input.value=text;
+ input.setAttribute('readonly','');
+ input.style.position='fixed';
+ input.style.opacity='0';
+ document.body.appendChild(input);
+ input.select();
+ let copied=false;
+ try{
+  copied=document.execCommand('copy');
+ }finally{
+  input.remove();
+ }
+ if(!copied)throw new Error('Browser tidak mengizinkan penyalinan otomatis. Salin nomor referensi secara manual.');
 }
 
 async function prepareReportPhoto(file){
@@ -566,18 +609,58 @@ function releaseReportSubmission(reservedAt){
  window.localStorage.setItem(REPORT_RATE_KEY,JSON.stringify(timestamps));
 }
 
-function showSavedReport(reportReference){
+function showSavedReport(report){
  const track=$('#track');
  track.replaceChildren();
  appendReportText(track,'span','Terkirim • Menunggu verifikasi','pill');
- appendReportText(track,'h3','Laporan berhasil dikirim');
- appendReportText(track,'p',`Nomor referensi: ${reportReference} • simpan nomor ini untuk cek status`,'mut');
+ appendReportText(track,'h3','Bukti laporan');
+ const details=document.createElement('dl');
+ details.className='report-proof-details';
+ const values=[
+  ['Nomor referensi',report.reference],
+  ['Kategori masalah',reportCategoryLabels[report.category]||report.category],
+  ['Lokasi',report.location],
+  ['Waktu lapor',report.reportedAt.toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})]
+ ];
+ for(const [label,value] of values){
+  appendReportText(details,'dt',label);
+  appendReportText(details,'dd',value);
+ }
+ track.appendChild(details);
+ const actions=document.createElement('div');
+ actions.className='report-proof-actions';
+ const copyButton=document.createElement('button');
+ copyButton.type='button';
+ copyButton.className='btn s';
+ copyButton.textContent='Salin Nomor Referensi';
+ copyButton.addEventListener('click',async()=>{
+  copyButton.disabled=true;
+  try{
+   await copyTextToClipboard(report.reference);
+   toast('Tersalin!');
+  }catch(error){
+   toast(`Nomor referensi tidak dapat disalin: ${error.message||'Silakan salin secara manual.'}`);
+  }finally{
+   copyButton.disabled=false;
+  }
+ });
+ actions.appendChild(copyButton);
+ const shareText=[
+  'Bukti laporan lingkungan SamosirLestari',
+  `Nomor referensi: ${report.reference}`,
+  `Kategori: ${reportCategoryLabels[report.category]||report.category}`,
+  `Lokasi: ${report.location}`,
+  `Waktu lapor: ${report.reportedAt.toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})}`,
+  `Cek status laporan: ${getSiteUrl()}`
+ ].join('\n');
+ actions.appendChild(createSamosirWhatsAppShareLink(shareText,'Simpan ke WhatsApp Saya'));
+ track.appendChild(actions);
  const statusButton=document.createElement('button');
  statusButton.type='button';
  statusButton.className='btn s';
  statusButton.textContent='Cek status laporan';
  statusButton.addEventListener('click',()=>{
-  $('#trackingReference').value=reportReference;
+  $('#trackingReference').value=report.reference;
   go('cekStatus');
  });
  track.appendChild(statusButton);
@@ -1052,7 +1135,8 @@ function renderCommunityEvent(event){
  appendReportText(card,'p',event.description||'Informasi kegiatan dari pengelola.');
  const startsAt=new Date(event.starts_at);
  const endsAt=new Date(event.ends_at);
- appendReportText(card,'p',`Jadwal: ${startsAt.toLocaleString('id-ID',{dateStyle:'full',timeStyle:'short'})} – ${endsAt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}`);
+ const scheduleText=`${startsAt.toLocaleString('id-ID',{dateStyle:'full',timeStyle:'short'})} – ${endsAt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}`;
+ appendReportText(card,'p',`Jadwal: ${scheduleText}`);
  appendReportText(card,'p',`Lokasi: ${event.location_label}`);
  if(Number.isFinite(Number(event.latitude))&&Number.isFinite(Number(event.longitude))){
   const mapLink=document.createElement('a');
@@ -1063,13 +1147,25 @@ function renderCommunityEvent(event){
   card.appendChild(mapLink);
  }
  appendReportText(card,'p',event.capacity?`Kuota maksimal: ${event.capacity} peserta`:'Pendaftaran terbuka selama acara masih aktif.');
+ const actions=document.createElement('div');
+ actions.className='community-event-actions';
+ const shareText=[
+  '🌿 Ayo bergotong royong menjaga lingkungan Samosir!',
+  event.title,
+  event.description||'Mari ikut berpartisipasi dalam kegiatan warga.',
+  `Jadwal: ${scheduleText}`,
+  `Lokasi: ${event.location_label}`,
+  `Info: ${getSiteUrl()}`
+ ].join('\n');
+ actions.appendChild(createSamosirWhatsAppShareLink(shareText,'Bagikan ke Grup WA'));
  const button=document.createElement('button');
  button.type='button';
  button.className='btn';
  button.dataset.registerEvent=event.id;
  button.dataset.eventTitle=event.title;
  button.textContent='Daftar hadir';
- card.appendChild(button);
+ actions.appendChild(button);
+ card.appendChild(actions);
  return card;
 }
 
@@ -1304,6 +1400,7 @@ $('#reportForm').addEventListener('submit',async e=>{
    photo_path:photoPath,
    contact_whatsapp:$('#reportWhatsapp').value.trim()||null
   };
+  const reportedAt=new Date();
   const {error:insertError}=await supabaseClient.from('reports').insert(reportPayload);
   if(insertError){
    const {error:cleanupError}=await supabaseClient.storage.from(REPORT_BUCKET).remove([photoPath]);
@@ -1319,7 +1416,12 @@ $('#reportForm').addEventListener('submit',async e=>{
   photoUploaded=false;
   photoPath=null;
   reportRateReservation=null;
-  showSavedReport(reportReference);
+  showSavedReport({
+   reference:reportReference,
+   category:reportPayload.category,
+   location:locationLabel,
+   reportedAt
+  });
   $('#reportForm').reset();
   if(reportPhotoUrl)URL.revokeObjectURL(reportPhotoUrl);
   reportPhotoUrl=null;
