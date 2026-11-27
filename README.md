@@ -12,6 +12,8 @@ Website informasi dan pelaporan masalah lingkungan di Kabupaten Samosir.
    `Supabase Dashboard -> SQL Editor -> New query -> Run`. Jika tabel laporan
    sudah pernah dibuat, jalankan ulang skrip untuk menerapkan skema pelacakan
    status, dashboard pengelola, dan kebijakan akses.
+   Fungsi `get_public_report_stats()` juga menyediakan hitungan agregat untuk
+   beranda tanpa memberikan akses baca anonim ke baris laporan.
 
 ### Menyiapkan akun pengelola
 
@@ -34,6 +36,7 @@ Foto laporan warga tetap privat dan hanya dapat dilihat pengelola. Foto bukti
 penyelesaian disimpan di bucket publik `report-resolution-photos`, sehingga
 siapa pun yang memiliki nomor referensi dapat melihatnya melalui halaman cek
 status. Nomor WhatsApp pelapor tidak dikembalikan oleh pencarian publik.
+Foto laporan awal tetap privat dan tidak ditampilkan pada halaman cek status.
 
 Untuk pengujian lokal, jalankan situs melalui server HTTP:
 

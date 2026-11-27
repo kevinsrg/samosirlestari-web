@@ -166,6 +166,27 @@ $$;
 revoke all on function public.lookup_report_by_reference(text) from public, anon, authenticated;
 grant execute on function public.lookup_report_by_reference(text) to anon, authenticated;
 
+create or replace function public.get_public_report_stats()
+returns table (
+  total_reports bigint,
+  in_progress_reports bigint,
+  completed_reports bigint
+)
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select
+    pg_catalog.count(*)::bigint,
+    pg_catalog.count(*) filter (where report.status = 'reviewing')::bigint,
+    pg_catalog.count(*) filter (where report.status = 'handled')::bigint
+  from public.reports as report;
+$$;
+
+revoke all on function public.get_public_report_stats() from public, anon, authenticated;
+grant execute on function public.get_public_report_stats() to anon;
+
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
   'report-photos',
