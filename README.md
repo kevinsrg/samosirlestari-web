@@ -64,5 +64,20 @@ Kebijakan anon membatasi operasi dan folder, tetapi endpoint laporan tetap dapat
 menerima spam otomatis. Untuk penggunaan publik dengan volume tinggi, tambahkan
 CAPTCHA serta pembatasan laju di sisi server.
 
+## Kegiatan komunitas
+
+Migrasi `supabase-reports.sql` juga menyiapkan tabel `community_events` dan
+`event_registrations`. Daftar acara aktif dapat dibaca publik, sedangkan
+pendaftaran tanpa akun dilakukan melalui fungsi `register_community_event`.
+Nama dan nomor WhatsApp peserta hanya dapat dibaca pengelola yang terdaftar di
+`report_admins`. Untuk mengumumkan salah satu contoh rencana acara, admin harus
+mengisi tanggal, waktu, lokasi, dan informasi yang sudah dikonfirmasi, lalu
+mengaktifkannya di Supabase.
+
+Lokasi titik pengumpulan sampah dan rute pada aplikasi saat ini merupakan
+perkiraan kawasan, bukan alamat fasilitas, jam operasional, atau panduan
+navigasi resmi. Verifikasi akses, jarak, penerimaan sampah, dan kondisi setempat
+sebelum berkunjung.
+
 Fitur login, pendaftaran, profil akun, poin, dan riwayat akun tidak tersedia di
 aplikasi. Data akun/laporan lama di Supabase tidak dihapus oleh perubahan ini.

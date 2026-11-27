@@ -226,3 +226,244 @@ using (
   bucket_id = 'report-resolution-photos'
   and (select public.is_report_admin())
 );
+
+create table if not exists public.community_events (
+  id uuid primary key default gen_random_uuid(),
+  title text not null check (char_length(title) between 3 and 160),
+  description text not null default '' check (char_length(description) <= 2000),
+  location_label text not null check (char_length(location_label) between 3 and 200),
+  latitude double precision,
+  longitude double precision,
+  starts_at timestamptz,
+  ends_at timestamptz,
+  capacity integer check (capacity is null or capacity > 0),
+  is_active boolean not null default false,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint community_events_dates_valid check (
+    (starts_at is null and ends_at is null)
+    or (starts_at is not null and ends_at is not null and ends_at > starts_at)
+  ),
+  constraint community_events_active_has_dates check (
+    not is_active or (starts_at is not null and ends_at is not null)
+  ),
+  constraint community_events_coordinates_valid check (
+    (latitude is null and longitude is null)
+    or (latitude between -90 and 90 and longitude between -180 and 180)
+  )
+);
+
+create index if not exists community_events_active_starts_at_idx
+on public.community_events (starts_at)
+where is_active;
+
+alter table public.community_events enable row level security;
+revoke all on public.community_events from anon, authenticated;
+grant select (
+  id,
+  title,
+  description,
+  location_label,
+  latitude,
+  longitude,
+  starts_at,
+  ends_at,
+  capacity,
+  is_active
+) on public.community_events to anon;
+grant select, insert, update, delete on public.community_events to authenticated;
+
+drop policy if exists "Public can read active community events" on public.community_events;
+create policy "Public can read active community events"
+on public.community_events for select to anon, authenticated
+using (
+  is_active
+  and starts_at is not null
+  and ends_at >= now()
+);
+
+drop policy if exists "Admins can read all community events" on public.community_events;
+create policy "Admins can read all community events"
+on public.community_events for select to authenticated
+using ((select public.is_report_admin()));
+
+drop policy if exists "Admins can create community events" on public.community_events;
+create policy "Admins can create community events"
+on public.community_events for insert to authenticated
+with check ((select public.is_report_admin()));
+
+drop policy if exists "Admins can update community events" on public.community_events;
+create policy "Admins can update community events"
+on public.community_events for update to authenticated
+using ((select public.is_report_admin()))
+with check ((select public.is_report_admin()));
+
+drop policy if exists "Admins can delete community events" on public.community_events;
+create policy "Admins can delete community events"
+on public.community_events for delete to authenticated
+using ((select public.is_report_admin()));
+
+create table if not exists public.event_registrations (
+  id uuid primary key default gen_random_uuid(),
+  event_id uuid not null references public.community_events(id) on delete cascade,
+  full_name text not null check (char_length(full_name) between 2 and 100),
+  whatsapp text not null check (char_length(whatsapp) between 8 and 30),
+  whatsapp_normalized text not null
+    check (whatsapp_normalized ~ '^[0-9]{8,15}$'),
+  registered_at timestamptz not null default now(),
+  constraint event_registrations_unique_phone unique (event_id, whatsapp_normalized)
+);
+
+create index if not exists event_registrations_event_id_idx
+on public.event_registrations (event_id);
+
+alter table public.event_registrations enable row level security;
+revoke all on public.event_registrations from anon, authenticated;
+grant select on public.event_registrations to authenticated;
+
+drop policy if exists "Admins can view event registrations" on public.event_registrations;
+create policy "Admins can view event registrations"
+on public.event_registrations for select to authenticated
+using ((select public.is_report_admin()));
+
+create or replace function public.register_community_event(
+  p_event_id uuid,
+  p_name text,
+  p_whatsapp text
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_event record;
+  v_name text;
+  v_whatsapp text;
+  v_whatsapp_normalized text;
+  v_registration_id uuid;
+  v_registration_count integer;
+begin
+  v_name := pg_catalog.btrim(coalesce(p_name, ''));
+  v_whatsapp := pg_catalog.btrim(coalesce(p_whatsapp, ''));
+  v_whatsapp_normalized := pg_catalog.regexp_replace(v_whatsapp, '[^0-9]', '', 'g');
+
+  if pg_catalog.char_length(v_name) < 2 or pg_catalog.char_length(v_name) > 100 then
+    raise exception using errcode = '22023', message = 'Nama harus berisi 2 sampai 100 karakter.';
+  end if;
+
+  if pg_catalog.char_length(v_whatsapp_normalized) < 8
+     or pg_catalog.char_length(v_whatsapp_normalized) > 15 then
+    raise exception using errcode = '22023', message = 'Nomor WhatsApp harus berisi 8 sampai 15 angka.';
+  end if;
+
+  select event.id, event.capacity, event.starts_at, event.ends_at, event.is_active
+  into v_event
+  from public.community_events as event
+  where event.id = p_event_id
+  for update;
+
+  if not found then
+    raise exception using errcode = 'P0001', message = 'Pendaftaran acara ini sudah tidak tersedia.';
+  end if;
+
+  if not v_event.is_active
+     or v_event.starts_at is null
+     or v_event.ends_at <= now() then
+    raise exception using errcode = 'P0001', message = 'Pendaftaran acara ini sudah tidak tersedia.';
+  end if;
+
+  if exists (
+    select 1
+    from public.event_registrations as registration
+    where registration.event_id = p_event_id
+      and registration.whatsapp_normalized = v_whatsapp_normalized
+  ) then
+    raise exception using errcode = '23505', message = 'Nomor WhatsApp ini sudah terdaftar untuk acara tersebut.';
+  end if;
+
+  if v_event.capacity is not null then
+    select pg_catalog.count(*)::integer
+    into v_registration_count
+    from public.event_registrations as registration
+    where registration.event_id = p_event_id;
+
+    if v_registration_count >= v_event.capacity then
+      raise exception using errcode = 'P0001', message = 'Kuota acara sudah penuh.';
+    end if;
+  end if;
+
+  insert into public.event_registrations (
+    event_id,
+    full_name,
+    whatsapp,
+    whatsapp_normalized
+  )
+  values (
+    p_event_id,
+    v_name,
+    v_whatsapp,
+    v_whatsapp_normalized
+  )
+  returning id into v_registration_id;
+
+  return v_registration_id;
+end;
+$$;
+
+revoke all on function public.register_community_event(uuid, text, text)
+from public, anon, authenticated;
+grant execute on function public.register_community_event(uuid, text, text)
+to anon, authenticated;
+
+insert into public.community_events (
+  id,
+  title,
+  description,
+  location_label,
+  latitude,
+  longitude,
+  starts_at,
+  ends_at,
+  capacity,
+  is_active
+)
+values
+  (
+    'a0000000-0000-4000-8000-000000000001',
+    'Aksi Bersih Pantai Pasir Putih Parbaba',
+    'Contoh rencana kegiatan. Pengelola perlu memastikan mitra, tanggal, titik kumpul, dan kebutuhan peserta sebelum memublikasikannya.',
+    'Pantai Pasir Putih Parbaba (titik area perkiraan)',
+    2.5658,
+    98.6747,
+    null,
+    null,
+    null,
+    false
+  ),
+  (
+    'a0000000-0000-4000-8000-000000000002',
+    'Penanaman Pohon di Pangururan',
+    'Contoh rencana kegiatan. Jenis pohon, izin lokasi, tanggal, titik kumpul, dan mitra pelaksana harus dikonfirmasi sebelum dipublikasikan.',
+    'Pangururan (titik area perkiraan)',
+    2.6098,
+    98.7062,
+    null,
+    null,
+    null,
+    false
+  ),
+  (
+    'a0000000-0000-4000-8000-000000000003',
+    'Gotong Royong Pilah Sampah di Tuktuk',
+    'Contoh rencana kegiatan. Pengelola perlu memastikan lokasi, tanggal, fasilitas pemilahan, dan tujuan penyaluran sampah sebelum memublikasikannya.',
+    'Tuktuk Siadong (titik area perkiraan)',
+    2.6571,
+    98.8552,
+    null,
+    null,
+    null,
+    false
+  )
+on conflict (id) do nothing;
