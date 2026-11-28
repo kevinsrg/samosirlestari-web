@@ -67,6 +67,14 @@ Kebijakan anon membatasi operasi dan folder, tetapi endpoint laporan tetap dapat
 menerima spam otomatis. Untuk penggunaan publik dengan volume tinggi, tambahkan
 CAPTCHA serta pembatasan laju di sisi server.
 
+## Instalasi dan akses offline
+
+Situs menyediakan `manifest.json` dan Service Worker untuk instalasi ke layar
+utama serta cache halaman dan aset lokal. Sajikan situs melalui HTTPS atau
+`localhost` agar Service Worker dapat berjalan. Beranda dan panduan pilah
+sampah tersedia offline setelah kunjungan pertama; peta, data Supabase, dan
+fitur yang membutuhkan jaringan tetap memerlukan koneksi internet.
+
 ## Kegiatan komunitas
 
 Migrasi `supabase-reports.sql` juga menyiapkan tabel `community_events` dan
